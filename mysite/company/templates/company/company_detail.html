@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if company_detail %}
+        <p><strong>Name: </strong>{{ company_detail.name }}</p>
+        <p><strong>Description: </strong>{{ company_detail.description }}</p>
+        <p><strong>Manager: </strong>{{ company_detail.manager }}</p>
+    {% endif %}
+{% endblock %}

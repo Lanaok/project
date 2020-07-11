@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if user.is_authenticated %}
+
+        {% if user_detail %}
+            <p><strong>User Name: </strong>{{ user_detail.username }}</p>
+            <p><strong>First Name: </strong>{{ user_detail.first_name }}</p>
+            <p><strong>Last Name: </strong>{{ user_detail.last_name }}</p>
+            <p><strong>Email: </strong>{{ user_detail.email }}</p>
+            <p><strong>Date Of Birth: </strong>{{ user_detail.profile.date_of_birth }}</p>
+            <p><strong>Phone Number: </strong>{{ user_detail.profile.phone_number }}</p>
+
+            <button onclick="window.location.href='{% url 'profile-update' %}'" type="button" class="btn btn-primary">
+                Edit Profile
+            </button>
+
+        {% else %}
+            not found
+        {% endif %}
+    {% else %}
+        <h1>please log in to view profile details</h1>
+    {% endif %}
+{% endblock %}

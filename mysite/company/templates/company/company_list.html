@@ -3,24 +3,50 @@
     {% if title %}
         <h1>{{ title }}</h1>
     {% endif %}
-    <ul>
-        {% for company in company_list %}
-            <li class="border mb-5 mx-auto">
-                <p><strong>Name: </strong>{{ company.name }}</p>
-                <p><strong>Desctiption: </strong>{{ company.description }}</p>
-                <p><strong>Manager: </strong>{{ company.manager.username }}</p>
-                {% if edit %}
-                    <button onclick="window.location.href='{% url 'company-update' %}{{ company.id }}'" type="button"
-                            class="btn btn-primary">
-                        Edit Company
-                    </button>
-                {% endif %}
-
-            </li>
-        {% endfor %}
-    </ul>
+    {#    <ul>#}
+    <div class="container">
+        <div class="row row-cols-3">
+            {% for company in company_list %}
+                {#                {% if forloop.counter0|divisibleby:3 %}#}
+                {#                    <div class="w-100"></div>#}
+                {#                {% endif %}#}
+                <div class="col px-lg-5 py-3">
+                    <div class="card" style="width: 18rem;">
+                        <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{{ company.get_absolute_url }}"> {{ company.name }}</a></h5>
+                            <p class="card-text">{{ company.description }}</p>
+{#                            <p><strong>Manager: </strong>{{ company.manager.username }}</p>#}
+                            {% if edit %}
+                                <div class="container">
+                                    <div class="row row-cols-2">
+                                        <div class="col">
+                                            <button onclick="window.location.href='{% url 'company-update' %}{{ company.id }}'"
+                                                    type="button"
+                                                    class="btn btn-primary">
+                                                Edit Company
+                                            </button>
+                                        </div>
+                                        <div class="col">
+                                            <form method="get" action="{% url 'company-add-staff' %}">
+                                                <input id="company_id" name="company_id" type="hidden"
+                                                       value="{{ company.id }}">
+                                                <button type="submit" class="btn btn-primary">
+                                                    Add Staff Members
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {#    </ul>#}
     {% if page_obj %}
-
         <div class="pagination">
 <span class="step-links">
         {% if page_obj.has_previous %}

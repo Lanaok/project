@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if staff_form %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                {{ staff_form }}
+            </table>
+            <input type="submit" value="Add to Staff">
+        </form>
+    {% endif %}
+{% endblock %}

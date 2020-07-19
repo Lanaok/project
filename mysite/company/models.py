@@ -20,6 +20,7 @@ class Company(models.Model):
     date_created = models.DateField(default=timezone.now)
     company_type = models.CharField(max_length=1, choices=Company_Type, default='R')
 
+
     class Meta:
         permissions = (("can_edit_company", "Edit company info"),)
 
@@ -35,7 +36,7 @@ class Products(models.Model):
     photos = models.ImageField()
     company_products = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)
 
-class StaffMember(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    date_created = models.DateField(default=timezone.now)
+# class StaffMember(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+#     date_created = models.DateField(default=timezone.now)

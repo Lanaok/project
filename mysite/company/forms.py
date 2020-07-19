@@ -1,8 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
-from django.db.models import Model
 
-from company.models import Company, StaffMember
+from company.models import Company
 
 
 class CompanyForm(forms.ModelForm):
@@ -11,15 +9,15 @@ class CompanyForm(forms.ModelForm):
         exclude = ['manager', 'date_created']
 
 
-class StaffForm(forms.Form):
-    user_field = forms.ModelChoiceField(queryset=User.objects.all(), label='User:', empty_label='None')
-
-    def __init__(self, *args, **kwargs):
-        company_id = kwargs.pop('company_id', None)
-        super(StaffForm, self).__init__(*args, **kwargs)
-        if company_id:
-            try:
-                self.fields['user_field'].queryset = User.objects.exclude(
-                    id__in=StaffMember.objects.filter(company_id=company_id).values('user_id'))
-            except StaffMember.DoesNotExist:
-                pass
+# class StaffForm(forms.Form):
+#     user_field = forms.ModelChoiceField(queryset=User.objects.all(), label='User:', empty_label='None')
+#
+#     def __init__(self, *args, **kwargs):
+#         company_id = kwargs.pop('company_id', None)
+#         super(StaffForm, self).__init__(*args, **kwargs)
+#         if company_id:
+#             try:
+#                 self.fields['user_field'].queryset = User.objects.exclude(
+#                     id__in=StaffMember.objects.filter(company_id=company_id).values('user_id'))
+#             except StaffMember.DoesNotExist:
+#                 pass

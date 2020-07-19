@@ -1,35 +1,48 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView
 
-from company.forms import CompanyForm, StaffForm
-from company.models import Company, StaffMember
+from company.forms import CompanyForm
+from company.models import Company
 
 
-def update_company(request, pk=None):
-    if pk:
-        company_instance = Company.objects.get(pk=pk)
+def update_company(request, company_id=None):
+    if company_id:
+        company_instance = Company.objects.get(pk=company_id)
     else:
         company_instance = Company()
+    company_form = CompanyForm(instance=company_instance)
 
     if request.method == 'POST':
-        company_form = CompanyForm(request.POST)
-        if company_form.is_valid():
-            company_instance.name = company_form.cleaned_data['name']
-            company_instance.description = company_form.cleaned_data['description']
-            if pk:
-                company_instance.manager = request.user
-                company_instance.date_created = timezone.now()
-            company_instance.save()
+        if 'company_update' in request.POST:
+            company_form = CompanyForm(request.POST)
+            if company_form.is_valid():
+                company_instance.name = company_form.cleaned_data['name']
+                company_instance.description = company_form.cleaned_data['description']
+                if company_id:
+                    company_instance.manager = request.user
+                    company_instance.date_created = timezone.now()
+                company_instance.save()
+            return redirect(reverse('company-detail', args=(company_instance.id,)))
 
-            return HttpResponseRedirect(reverse('company-detail', args=(company_instance.id,)))
-    else:
-        company_form = CompanyForm(instance=company_instance)
+        elif 'add_staff' in request.POST:
+            user_to_add = request.POST['user_name']
+            try:
+                user = User.objects.get(username=user_to_add)
+                company_instance.staff.add(user.profile)
+            except User.DoesNotExist:
+                messages.error(request,("error1"))
 
-    return render(request, 'company/company_form.html', {'company_form': company_form})
+        elif 'remove_staff' in request.POST:
+            username_to_remove = request.POST.get('user_to_remove', None)
+            staffMember = company_instance.staff.remove(User.objects.get(username=username_to_remove).profile)
+
+    return render(request, 'company/company_form.html',
+                  {'company_form': company_form, 'staff_list': company_instance.staff.values('user__username')})
 
 
 def view_company(request, pk):
@@ -40,23 +53,6 @@ def view_my_companies(request):
     return render(request, 'company/company_list.html',
                   {'company_list': Company.objects.all().filter(manager=request.user),
                    'edit': True, 'paginate': False, 'title': 'My Companies'})
-
-
-def add_staff_to_company(request):
-    company_id = request.GET['company_id']
-    if request.method == 'POST':
-        staff_form = StaffForm(request.POST)
-        if staff_form.is_valid():
-            if StaffMember.objects.filter(user=staff_form.cleaned_data['user_field'],
-                                          company_id=company_id).count() > 0:
-                staff_form.errors['user_field'] = ("already_member",)
-                return render(request, 'company/company_add_member_form.html', {'staff_form': staff_form})
-            else:
-                StaffMember(user=staff_form.cleaned_data['user_field'], company_id=company_id).save()
-            return HttpResponseRedirect(reverse('company-list'))
-    else:
-        staff_form = StaffForm(company_id=company_id)
-    return render(request, 'company/company_add_member_form.html', {'staff_form': staff_form})
 
 
 class CompanyList(ListView):

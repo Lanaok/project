@@ -9,7 +9,6 @@
                          alt="...">
                     <p><strong>Name: </strong>{{ company_detail.name }}</p>
                     <p><strong>Description: </strong>{{ company_detail.description }}</p>
-                    <p><strong>Manager: </strong>{{ company_detail.manager }}</p>
                     <p><strong>Staff Members: </strong>
                         {% for member in company_detail.staffmember_set.all %}
                             <strong>{{ member.user.username }} </strong>

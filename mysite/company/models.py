@@ -15,7 +15,6 @@ class Company(models.Model):
         ('S', 'Beauty Salon'),
     )
     name = models.CharField(max_length=50)
-    manager = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     description = models.TextField(max_length=500)
     date_created = models.DateField(default=timezone.now)
     company_type = models.CharField(max_length=1, choices=Company_Type, default='R')
@@ -35,6 +34,8 @@ class Products(models.Model):
     product_description = models.TextField(max_length=500)
     photos = models.ImageField()
     company_products = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)
+
+
 
 # class StaffMember(models.Model):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)

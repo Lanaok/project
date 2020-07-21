@@ -9,7 +9,7 @@
             <p><strong>Email: </strong>{{ user_detail.email }}</p>
             <p><strong>Date Of Birth: </strong>{{ user_detail.profile.date_of_birth }}</p>
             <p><strong>Phone Number: </strong>{{ user_detail.profile.phone_number }}</p>
-
+            <p><strong>My Services: </strong>{{ user_detail.profile.staff_services }}</p>
             <button onclick="window.location.href='{% url 'profile-update' %}'" type="button" class="btn btn-primary">
                 Edit Profile
             </button>

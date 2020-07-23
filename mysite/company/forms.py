@@ -6,7 +6,7 @@ from company.models import Company
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        exclude = ['date_created']
+        exclude = ['date_created', 'manager', 'date_updated']
 
 
 # class StaffForm(forms.Form):

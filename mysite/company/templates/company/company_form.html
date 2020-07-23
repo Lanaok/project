@@ -13,36 +13,6 @@
                                name="company_update">
                     </form>
                 </div>
-                <div class="col-6-lg ml-auto">
-                    <h4>Staff List</h4>
-                    <ul >
-                        {% for staff in staff_list %}
-                            <li>
-                                <form action="" method="post" name="add_staff">
-                                    {% csrf_token %}
-                                    <div class="col-6">
-                                        {{ staff.user__username }}
-                                    </div>
-                                    <div class="col-6">
-                                        <input type="hidden" value="{{ staff.user__username }}" name="user_to_remove">
-                                    </div>
-                                    <input type="submit" value="remove" name="remove_staff">
-                                </form>
-                                {% if messages %}
-                                    {% for message in messages %}
-                                        <div class="alert {% if message.tags %} alert-{{ message.tags }}{% endif %}">{{ message|safe }}</div>
-                                    {% endfor %}
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <form action="" method="post" name="add_staff">
-                        {% csrf_token %}
-                        <label> add user</label>
-                        <input type="text" name="user_name">
-                        <input type="submit" value="add user" name="add_staff">
-                    </form>
-                </div>
             </div>
         </div>
     {% else %}

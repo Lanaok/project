@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from profile.models import Profile
+from profile.models import Profile, Manager
 
 
 class Company(models.Model):
@@ -14,7 +14,7 @@ class Company(models.Model):
         ('S', 'Beauty Salon'),
     )
     name = models.CharField(max_length=50)
-    manager = models.OneToOneField(Profile, null=True, on_delete=models.SET_NULL)
+    manager = models.OneToOneField(Manager, null=True, on_delete=models.SET_NULL)
     description = models.TextField(max_length=500)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)

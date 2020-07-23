@@ -14,17 +14,20 @@
                             <strong>{{ member.user.username }} </strong>
                         {% endfor %}
                     </p>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-auto">
-                                <button onclick="window.location.href='{% url 'company-update' %}{{ company_detail.id }}'"
-                                        type="button"
-                                        class="btn btn-primary">
-                                    Edit Company
-                                </button>
+                    {% if company_detail %}
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <button onclick="location.href='{% url 'company-update' company_id=company_detail.id %}'"
+                                            type="button"
+                                            class="btn btn-primary">
+                                        Edit Company
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

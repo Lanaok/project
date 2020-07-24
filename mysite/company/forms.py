@@ -1,13 +1,25 @@
 from django import forms
 
 from company.models import Company
+from company.models import StaffMember
+from company.models import Service
 
 
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = StaffMember
+        exclude = ['Company']
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         exclude = ['date_created', 'manager', 'date_updated']
 
+
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        exclude = ['Company']
 
 # class StaffForm(forms.Form):
 #     user_field = forms.ModelChoiceField(queryset=User.objects.all(), label='User:', empty_label='None')

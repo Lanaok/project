@@ -6,8 +6,12 @@ from django.utils import timezone
 from django.views.generic import ListView
 
 from company.forms import CompanyForm
+from company.forms import StaffForm
+from company.forms import ServiceForm
 from company.models import Company, StaffMember
+from company.models import Service
 from profile.models import Manager
+import datetime
 
 
 def update_company(request, company_id=None):
@@ -44,6 +48,7 @@ def update_company(request, company_id=None):
                   {'company_form': company_form})
 
 
+
 def view_company(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, 'company/company_detail.html',
@@ -55,6 +60,25 @@ def view_my_companies(request):
                   {'company_list': Company.objects.all().filter(manager=request.user.profile.manager),
                    'edit': True, 'paginate': False, 'title': 'My Companies'})
 
+
+def add_staff_to_company(request):
+    comp_manager = Manager.objects.get(profile=request.user.profile)
+    company = Company.objects.get(manager=comp_manager)
+    staff_instance = StaffMember(company=company)
+    staff_form = StaffForm(instance=staff_instance)
+    return render(request, 'company/company_add_member_form.html', {'staff_form': staff_form})
+
+def add_services_to_company(request):
+    comp_manager = Manager.objects.get(profile=request.user.profile)
+    company = Company.objects.get(manager=comp_manager)
+    duration=datetime.timedelta(days=0)
+    service_inst = Service(service_price=0, service_duration=duration)
+    service_inst.save()
+    service_inst.company.add(company)
+
+    service_form = ServiceForm(instance=service_inst)
+
+    return render(request, 'company/company_add_service_form.html', {'service_form': service_form})
 
 class CompanyList(ListView):
     model = Company

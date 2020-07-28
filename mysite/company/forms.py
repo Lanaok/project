@@ -12,7 +12,7 @@ class StaffForm(forms.ModelForm):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        exclude = ['date_created', 'manager', 'date_updated']
+        exclude = ['date_created', 'manager', 'date_updated', 'company_type']
 
 
 

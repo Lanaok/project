@@ -10,8 +10,13 @@
                     <p><strong>Name: </strong>{{ company_detail.name }}</p>
                     <p><strong>Description: </strong>{{ company_detail.description }}</p>
                     <p><strong>Staff Members: </strong>
-                        {% for member in company_detail.staffmember_set.all %}
-                            <strong>{{ member.user.username }} </strong>
+                        {% for member in staff_member %}
+                            <strong>{{ member.staff_profile.user.name }} </strong>
+                        {% endfor %}
+                    </p>
+                    <p><strong>Company Services: </strong>
+                        {% for service in list_of_services %}
+                            <strong>{{ service.service_name }} </strong>
                         {% endfor %}
                     </p>
                     {% if company_detail %}

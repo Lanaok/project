@@ -9,5 +9,6 @@ urlpatterns = [
     path('my_companies/', views.view_my_companies, name='my-company-list'),
     path('add_staff/', views.add_staff_to_company, name='company-add-staff'),
     path('add_services/', views.add_services_to_company, name='company-add-service'),
+
 ]
 

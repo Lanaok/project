@@ -13,6 +13,9 @@ class Profile(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Manager(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)

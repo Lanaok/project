@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="col-4">
+            {% for staff in  staff_list %}
+                <div class="row col-sm-auto mb-2">
+                    <div class="col">
+                        {{ staff }}
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary"
+                                onclick="location.href='{% url 'staff-edit' company_id=company_id staff_id=staff.id %}'">
+                            Edit
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary"
+                                onclick="location.href='{% url 'staff-remove' company_id=company_id staff_id=staff.id %}'"
+                                name="hi">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="button" class="btn btn-primary"
+                    onclick="location.href='{% url 'staff-add' company_id=company_id %}'"> Add Staff
+            </button>
+        </div>
+    </div>
+
+{% endblock %}

@@ -9,36 +9,13 @@
                         <table>
                             {{ company_form.as_table }}
                         </table>
-                        <style>
-            .GFG {
-            background-color: white;
-            border: 2px solid black;
-            color: green;
-            padding: 5px 10px;
-            text-align: center;
-            display: inline-block;
-            font-size: 20px;
-            margin: 10px 30px;
-            cursor: pointer;
-            text-decoration:none;
-        }
-                 </style>
-                         <button class = "GFG"
-                                         onclick="location.href='{% url 'company-add-staff' %}';"
-                                            type="button"
-                                            class="btn btn-primary">
-                                        Add staff
-                                    </button>
-                        <button class = "GFG"
-                                         onclick="location.href='{% url 'company-add-service' %}';"
-                                            type="button"
-                                            class="btn btn-primary">
-                                        Add Services
-                                    </button>
-                <input class="btn btn-primary align-items-center" type="submit" value="Submit"
-                               name="company_update">
+                        <div class="container mt-lg-4">
+                            <div class="row justify-content-center ">
+                                <input class="btn btn-primary align-items-center" type="submit" value="Submit"
+                                       name="company_update">
+                            </div>
+                        </div>
                     </form>
-
                 </div>
             </div>
         </div>

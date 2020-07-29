@@ -6,12 +6,11 @@ from django.utils import timezone
 from django.views.generic import ListView
 
 from company.forms import CompanyForm
-from company.forms import StaffForm
 from company.forms import ServiceForm
 from company.models import Company, StaffMember
 from company.models import Service
-from profile.models import Manager
-import datetime
+from profile import models
+from profile.models import Manager, Profile
 
 
 def update_company(request, company_id=None):
@@ -29,7 +28,7 @@ def update_company(request, company_id=None):
             if company_form.is_valid():
                 company_instance.name = company_form.cleaned_data['name']
                 company_instance.description = company_form.cleaned_data['description']
-                # company_instance.company_type = company_form.cleaned_data['company_type']
+                company_instance.company_type = company_form.cleaned_data['company_type']
                 if company_id:
                     company_instance.date_updated = timezone.now()
                 else:
@@ -42,22 +41,18 @@ def update_company(request, company_id=None):
                     company_instance.manager = manager
                     company_instance.date_created = timezone.now()
                 company_instance.save()
-                staffers = StaffMember.objects.all().filter(company=company_instance)
-            return redirect(reverse('company-detail', {'staff_member': staffers}))
+                return redirect(reverse('company-detail', args=(company_instance.id,)))
 
     return render(request, 'company/company_form.html',
                   {'company_form': company_form})
 
 
-def view_company(request, pk):
-    company = Company.objects.get(pk=pk)
-    staffers = StaffMember.objects.all().filter(company=company)
-    if staffers is not None:
-        return render(request, 'company/company_detail.html',
-                      {'company_detail': company, 'show_edit_button': company.manager.profile == request.user.profile,
-                       'staff_member': staffers})
+def view_company(request, company_id):
+    company = Company.objects.get(pk=company_id)
     return render(request, 'company/company_detail.html',
-                  {'company_detail': company, 'show_edit_button': company.manager.profile == request.user.profile})
+                  {'company': company,
+                   'show_edit_button': company.manager.profile == request.user.profile})
+
 
 def view_my_companies(request):
     return render(request, 'company/company_list.html',
@@ -65,38 +60,88 @@ def view_my_companies(request):
                    'edit': True, 'paginate': False, 'title': 'My Companies'})
 
 
-def add_staff_to_company(request):
-    comp_manager = Manager(profile=request.user.profile)
-    company = Company(manager=comp_manager)
-    staff_instance = StaffMember(company=company)
-    staff_form = StaffForm(instance=staff_instance)
+def is_checked(staff_instance, service_id):
+    if staff_instance:
+        return staff_instance.services.filter(pk=service_id).exists()
+    return False
+
+
+# TODO[IM]: add errors to form
+def staff_add(request, company_id):
+    company = Company(pk=company_id)
     if request.method == 'POST':
-        if staff_form.is_valid():
-            staff_instance.save()
-            staff_form.save()
-            staffers = StaffMember.objects.all().filter(company=company)
-            return redirect(reverse('company-update', {'company_detail': company,
-                                                       'show_edit_button': company.manager.profile == request.user.profile,
-                                                       'staff_member': staffers}))
+        try:
+            profile = Profile.objects.filter(user__username=request.POST['username']).get()
+            staff_service_list = request.POST.getlist('checked_services')
+            staff_member = StaffMember(profile=profile, company=company)
+            staff_member.save()
+            for checked_service_id in staff_service_list:
+                staff_member.services.add(checked_service_id)
+        except models.Profile.DoesNotExist:
+            pass
+    staff_service_list = list(
+        map(lambda service: {'id': service.id, 'name': service.name}, company.service_set.all()))
 
-    return render(request, 'company/company_add_member_form.html', {'staff_form': staff_form})
+    return render(request, 'company/staff/staff_add.html', {'service_list': staff_service_list})
 
 
-def add_services_to_company(request):
-    comp_manager = Manager(profile=request.user.profile)
-    company = Company(manager=comp_manager)
-    duration = datetime.timedelta(days=0)
-    service_inst = Service(service_price=0, service_duration=duration)
-    service_form = ServiceForm(instance=service_inst)
+def staff_edit(request, company_id, staff_id):
+    staff_member = StaffMember.objects.get(pk=staff_id)
     if request.method == 'POST':
+        new_staff_service_list = request.POST.getlist('checked_services')
+        staff_member.services.clear()
+        for checked_service_id in new_staff_service_list:
+            staff_member.services.add(checked_service_id)
+        staff_member.save()
+        return redirect(reverse('staff-list', args=(staff_member.company.id,)))
+
+    company = staff_member.company
+    staff_service_list = list(
+        map(lambda service: {'id': service.id, 'name': service.name,
+                             'is_checked': is_checked(staff_member, service.id)}, company.service_set.all()))
+    return render(request, 'company/staff/staff_edit.html',
+                  {'staff_member': staff_member, 'service_list': staff_service_list})
+
+
+def staff_remove(request, company_id, staff_id):
+    StaffMember.objects.get(pk=staff_id).delete()
+    return redirect(reverse('staff-list', args=(company_id,)))
+
+
+def staff_list(request, company_id):
+    return render(request, 'company/staff/staff_list.html',
+                  {'staff_list': StaffMember.objects.filter(company_id=company_id),
+                   'company_id': company_id})
+
+
+def service_add(request, company_id, service_id=None):
+    company = Company(pk=company_id)
+    if service_id:
+        service_instance = Service.objects.get(pk=service_id)
+    else:
+        service_instance = Service(company=company)
+    service_form = ServiceForm(instance=service_instance)
+
+    if request.method == 'POST':
+        service_form = ServiceForm(request.POST)
         if service_form.is_valid():
-            service_inst.save()
-            service_inst.save()
-            company.save()
-            list_services = Service.objects.all().filter(company=company)
-            return render((reverse('company-update', {'list_of_services': list_services})))
+            service_instance: Service = service_form.save(commit=False)
+            service_instance.company = company
+            service_instance.save()
+        return redirect(reverse('service-list', args=(company_id,)))
 
-    return render(request, 'company/company_add_service_form.html', {'service_form': service_form})
+    return render(request, 'company/services/service_edit.html', {'service_form': service_form})
+
+
+def service_remove(request, company_id, service_id):
+    Service.objects.get(pk=service_id).delete()
+    return redirect(reverse('service-list', args=(company_id,)))
+
+
+def service_list(request, company_id):
+    return render(request, 'company/services/service_list.html',
+                  {'services': Service.objects.filter(company_id=company_id),
+                   'company_id': company_id})
 
 
 class CompanyList(ListView):
@@ -111,8 +156,3 @@ class CompanyList(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'All Companies'
         return context
-
-
-class StaffList(ListView):
-    model = StaffMember
-    template_name = "company/staff"

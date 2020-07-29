@@ -22,20 +22,23 @@
                                 <div class="container">
                                     <div class="row row-cols-2">
                                         <div class="col">
-                                            <button onclick="window.location.href='{% url 'company-update' %}{{ company.id }}'"
+                                            <button onclick="location.href='{% url 'company-update'  company_id=company.id %}'"
                                                     type="button"
                                                     class="btn btn-primary">
                                                 Edit Company
                                             </button>
                                         </div>
                                         <div class="col">
-                                            <form method="get" action="{% url 'company-add-staff' %}">
-                                                <input id="company_id" name="company_id" type="hidden"
-                                                       value="{{ company.id }}">
-                                                <button type="submit" class="btn btn-primary">
-                                                    Add Staff Members
-                                                </button>
-                                            </form>
+                                            <button type="submit" class="btn btn-primary"
+                                                    onclick="location.href='{% url 'staff-list' company_id=company.id %}'">
+                                                View Staff Members
+                                            </button>
+                                        </div>
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-primary"
+                                                    onclick="location.href='{% url 'service-list' company_id=company.id %}'">
+                                                View Services
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <label>{{ staff_member.profile.user.username }}</label>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div style="overflow: auto; width: 200px; height: 75px; display: inline-block">
+            {% for service in service_list %}
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="{{ service.id }}"
+                                {% if service.is_checked %} checked {% endif %}name="checked_services">
+                        {{ service.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

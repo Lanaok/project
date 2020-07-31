@@ -17,7 +17,7 @@ class Company(models.Model):
         BEAUTY_SALOON = 'BE', 'Beauty Salon'
 
     name = models.CharField(max_length=50)
-    manager = models.OneToOneField(Manager, null=True, on_delete=models.SET_NULL)
+    manager = models.ForeignKey(Manager, null=True, on_delete=models.SET_NULL)
     description = models.TextField(max_length=500)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(default=timezone.now)
@@ -43,7 +43,7 @@ class Products(models.Model):
 class Service(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=200)
-    price = models.IntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
     duration = models.DurationField(default=timedelta(days=0))
     image = models.ImageField(null=True, blank=True)
     company = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)

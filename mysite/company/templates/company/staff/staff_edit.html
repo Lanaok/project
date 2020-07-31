@@ -1,18 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-    <label>{{ staff_member.profile.user.username }}</label>
-    <form action="" method="post">
-        {% csrf_token %}
-        <div style="overflow: auto; width: 200px; height: 75px; display: inline-block">
-            {% for service in service_list %}
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" value="{{ service.id }}"
-                                {% if service.is_checked %} checked {% endif %}name="checked_services">
-                        {{ service.name }}</label>
+    <div class="container mt-sm-4">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% if not staff_member %}
+                <div class="form-group row justify-content-center">
+                    <label for="username" class="col-sm-2 col-form-label">
+                        User Name:
+                    </label>
+                    <input type="text" id="username"
+                           value="{% if entered_username %}{{ entered_username }}{% endif %}"
+                           name="username" class="form-control col-sm-5">
                 </div>
-            {% endfor %}
-        </div>
-        <input type="submit" value="Save">
-    </form>
+            {% endif %}
+            <div class="form-group row justify-content-center">
+                <label for="services" class="col-sm-2 col-form-label">
+                    Services:
+                </label>
+                <div class="form-control col-sm-5" style="overflow: auto; height: 75px;" id="services">
+                    {% for service in service_list %}
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox" value="{{ service.id }}"
+                                       name="checked_services">
+                                {{ service.name }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group row justify-content-center">
+                <input type="submit" value="{% if staff_member %}Save{% else %}Add to Staff{% endif %}"
+                       class="btn btn-primary">
+            </div>
+        </form>
+    </div>
 {% endblock %}

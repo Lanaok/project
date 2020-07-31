@@ -1,15 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
     {% if user.is_authenticated %}
-        <p><strong>User Name: </strong>{{ user.get_username }}</p>
-        <form action="" method="post">
-            {% csrf_token %}
-            <table>
-                {{ user_form.as_table }}
-                {{ profile_form.as_table }}
-            </table>
-            <input class="btn btn-primary" type="submit" value="Submit">
-        </form>
+        <div class="container">
+            <div class="form-group row justify-content-center">
+                <label class="col-sm-2 col-form-label">User Name</label>
+                <div class="col-sm-5">
+                    <input type="text" disabled class="form-control" readonly value="{{ user.get_username }}">
+                </div>
+            </div>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% include "company/formtemplates/form_fields_template.html" with form=user_form %}
+                {% include "company/formtemplates/form_fields_template.html" with form=profile_form %}
+                {% include "company/formtemplates/centered_form_button.html" with button_name="Subimt" %}
+            </form>
+
+        </div>
     {% else %}
         <h1>please log in to view profile details</h1>
     {% endif %}

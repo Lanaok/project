@@ -1,0 +1,7 @@
+<div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        {% include "company/formtemplates/form_fields_template.html" with form=form %}
+        {% include "company/formtemplates/centered_form_button.html" with button_name=button_name %}
+    </form>
+</div>

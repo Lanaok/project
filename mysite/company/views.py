@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
@@ -74,22 +75,28 @@ def staff_has_service(staff_instance, service_id):
 def add_staff(request, company_id):
     company = Company(pk=company_id)
     entered_username = None
+    error_message = None
     if request.method == 'POST':
         try:
             entered_username = request.POST['username']
             profile = Profile.objects.filter(user__username=entered_username).get()
-            staff_service_list = request.POST.getlist('checked_services')
-            staff_member = StaffMember(profile=profile, company=company)
-            staff_member.save()
-            for checked_service_id in staff_service_list:
-                staff_member.services.add(checked_service_id)
+            if StaffMember.objects.filter(profile=profile, company=company).exists():
+                error_message = "user is already a member"
+            else:
+                staff_service_list = request.POST.getlist('checked_services')
+                staff_member = StaffMember(profile=profile, company=company)
+                staff_member.save()
+                for checked_service_id in staff_service_list:
+                    staff_member.services.add(checked_service_id)
         except models.Profile.DoesNotExist:
-            pass
+            error_message = "could not find user"
+
     staff_service_list = list(
         map(lambda service: {'id': service.id, 'name': service.name}, company.service_set.all()))
 
     return render(request, 'company/staff/staff_edit.html',
-                  {'service_list': staff_service_list, 'entered_username': entered_username})
+                  {'service_list': staff_service_list, 'entered_username': entered_username,
+                   'error_message': error_message})
 
 
 def edit_staff(request, company_id, staff_id):

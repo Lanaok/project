@@ -36,14 +36,11 @@
                             {% if show_edit_button %}
                                 <button onclick="location.href='{% url 'company-update'  company_id=company.id %}'"
                                         type="button"
+                                        data-toggle="modal" data-target="#exampleModal"
                                         class="btn btn-primary">
                                     Edit
                                 </button>
-                                <button onclick="location.href='{% url 'company-remove'  company_id=company.id %}'"
-                                        type="button"
-                                        class="btn btn-danger">
-                                    Remove
-                                </button>
+                                {% include 'company/company/company_delete_button.html' with company_id=company.id %}
                             {% endif %}
                         </div>
                     </div>

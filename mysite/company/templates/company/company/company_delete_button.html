@@ -1,0 +1,8 @@
+{% url 'company-remove'  company_id=company_id as forward_link %}
+{% include 'company/modal/confirm_modal.html' with modal_id="removeCompany" forward_link=forward_link modal_text="Are you sure you want to remove the company?" %}
+<button
+        type="button"
+        data-toggle="modal" data-target="#removeCompany"
+        class="btn btn-danger">
+    Remove
+</button>

@@ -44,8 +44,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'profile',
     'order',
-    'company'
+    'company',
+
+    'crispy_forms',
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_ID = 1
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_EMAIL_REQUIRED = True

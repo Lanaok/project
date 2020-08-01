@@ -1,3 +1,5 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django import forms
 from django.forms import TextInput, Textarea, Select, NumberInput, TimeInput, FileInput
 
@@ -14,6 +16,17 @@ class CompanyForm(forms.ModelForm):
             'description': Textarea(attrs={'class': 'form-control'}),
             'company_type': Select(attrs={'class': 'form-control custom-select'}, )
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "company_form"
+        self.helper.form_class = "form-horizontal"
+        self.helper.label_class = "col-sm-2"
+        self.helper.field_class = "col-sm-5"
+        self.helper.form_method = "post"
+        self.helper.form_action = ""
+        self.helper.add_input(Submit('submit', 'Submit'))
 
 
 class ServiceForm(forms.ModelForm):

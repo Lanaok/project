@@ -13,7 +13,7 @@
 {{ form.errors|json_script:"error_list" }}
 <script>
     const errors = JSON.parse(document.getElementById('error_list').textContent);
-    for (error in errors) {
+    for (const error in errors) {
         document.getElementById('id_' + error).classList.add('is-invalid')
     }
 </script>

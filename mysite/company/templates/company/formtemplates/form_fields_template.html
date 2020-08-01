@@ -1,8 +1,19 @@
 {% for field in form %}
     <div class="form-group row justify-content-center">
-        <label class="col-sm-2 col-form-label">{{ field.label }}</label>
+        <label class="col-sm-2 col-form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
         <div class="col-sm-5">
             {{ field }}
+            <div class="invalid-feedback">
+                {{ field.errors }}
+            </div>
         </div>
     </div>
 {% endfor %}
+
+{{ form.errors|json_script:"error_list" }}
+<script>
+    const errors = JSON.parse(document.getElementById('error_list').textContent);
+    for (error in errors) {
+        document.getElementById('id_' + error).classList.add('is-invalid')
+    }
+</script>

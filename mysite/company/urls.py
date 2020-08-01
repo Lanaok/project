@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from order.views import MakeOrder
 urlpatterns = [
     path('<int:company_id>/view/', views.view_company, name='company-detail'),
     path('<int:company_id>/edit/', views.edit_company, name='company-update'),
@@ -15,6 +16,7 @@ urlpatterns = [
     path('<int:company_id>/staff/<int:staff_id>/remove', views.remove_staff, name='staff-remove'),
 
     path('<int:company_id>/services/', views.list_service, name='service-list'),
+    path('<int:company_id>/order/', MakeOrder, name='make-order'),
     path('<int:company_id>/service/add', views.edit_service, name='service-add'),
     path('<int:company_id>/service/<int:service_id>', views.edit_service, name='service-view'), # todo change to view.
     path('<int:company_id>/service/<int:service_id>/edit/', views.edit_service, name='service-edit'),

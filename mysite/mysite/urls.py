@@ -23,6 +23,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('profile/', include('profile.urls')),
     path('company/', include('company.urls')),
+    path('search/', include('search.urls')),
     # path('order/', include('order.urls')),
     path('', views.CompanyList.as_view())
 ]

@@ -9,38 +9,12 @@
 </head>
 <body>
 {% include 'navbar.html' %}
-{#{% block body %}#}
-
-{#    {% if messages %}#}
-{#        <div>#}
-{#            <strong>Messages:</strong>#}
-{#            <ul>#}
-{#                {% for message in messages %}#}
-{#                    <li>{{ message }}</li>#}
-{#                {% endfor %}#}
-{#            </ul>#}
-{#        </div>#}
-{#    {% endif %}#}
-{##}
-{#    <div>#}
-{#        <strong>Menu:</strong>#}
-{#        <ul>#}
-{#            {% if user.is_authenticated %}#}
-{#                <li><a href="{% url 'account_email' %}">Change E-mail</a></li>#}
-{#                <li><a href="{% url 'account_logout' %}">Sign Out</a></li>#}
-{#            {% else %}#}
-{#                <li><a href="{% url 'account_login' %}">Sign In</a></li>#}
-{#                <li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
-{#            {% endif %}#}
-{#        </ul>#}
-{#    </div>#}
 <div class="container-fluid">
     {% block content %}
     {% endblock %}
-    {#{% endblock %}#}
-    {#{% block extra_body %}#}
-    {#{% endblock %}#}
 </div>
+
+<script src="https://use.fontawesome.com/97c81e047c.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

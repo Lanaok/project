@@ -11,6 +11,8 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container-fluid">
+    {% load crispy_forms_tags %}
+
     {% block content %}
     {% endblock %}
 </div>

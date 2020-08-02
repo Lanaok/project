@@ -51,6 +51,9 @@ class Service(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('service-view', args=[str(self.id)])
+
 
 class StaffMember(models.Model):
     profile = models.OneToOneField(Profile, null=True, on_delete=models.SET_NULL)
@@ -60,3 +63,6 @@ class StaffMember(models.Model):
 
     def __str__(self):
         return self.profile.user.username
+
+    def get_absolute_url(self):
+        return reverse('staff-view', args=[str(self.id)])

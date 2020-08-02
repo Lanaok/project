@@ -88,6 +88,7 @@ def add_staff(request, company_id):
                 staff_member.save()
                 for checked_service_id in staff_service_list:
                     staff_member.services.add(checked_service_id)
+                return redirect(reverse('staff-view', args=(staff_member.id,)))
         except models.Profile.DoesNotExist:
             error_message = "could not find user"
 
@@ -99,7 +100,7 @@ def add_staff(request, company_id):
                    'error_message': error_message})
 
 
-def edit_staff(request, company_id, staff_id):
+def edit_staff(request, staff_id):
     staff_member = StaffMember.objects.get(pk=staff_id)
     if request.method == 'POST':
         new_staff_service_list = request.POST.getlist('checked_services')
@@ -117,8 +118,15 @@ def edit_staff(request, company_id, staff_id):
                   {'staff_member': staff_member, 'service_list': staff_service_list})
 
 
-def remove_staff(request, company_id, staff_id):
-    StaffMember.objects.get(pk=staff_id).delete()
+def view_staff(request, staff_id):
+    return render(request, 'company/staff/staff_detail.html',
+                  {'staff_member': StaffMember.objects.get(pk=staff_id)})
+
+
+def remove_staff(request, staff_id):
+    staff_member = StaffMember.objects.get(pk=staff_id)
+    company_id = staff_member.company_id
+    staff_member.delete()
     return redirect(reverse('staff-list', args=(company_id,)))
 
 
@@ -147,8 +155,10 @@ def edit_service(request, company_id, service_id=None):
     return render(request, 'company/services/service_form.html', {'service_form': service_form})
 
 
-def remove_service(request, company_id, service_id):
-    Service.objects.get(pk=service_id).delete()
+def remove_service(request, service_id):
+    service = Service.objects.get(pk=service_id)
+    company_id = service.company_id
+    service.delete()
     return redirect(reverse('service-list', args=(company_id,)))
 
 
@@ -156,6 +166,11 @@ def list_service(request, company_id):
     return render(request, 'company/services/service_list.html',
                   {'services': Service.objects.filter(company_id=company_id),
                    'company_id': company_id})
+
+
+def view_service(request, service_id):
+    return render(request, 'company/services/service_detail.html',
+                  {'service': Service.objects.get(pk=service_id)})
 
 
 class CompanyList(ListView):

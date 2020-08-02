@@ -5,17 +5,17 @@
             {% for staff in  staff_list %}
                 <div class="row col-sm-auto mb-2">
                     <div class="col">
-                        {{ staff }}
+                        <a href="{{ staff.get_absolute_url }}"> {{ staff.profile.user.username }}</a>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary"
-                                onclick="location.href='{% url 'staff-edit' company_id=company_id staff_id=staff.id %}'">
+                                onclick="location.href='{% url 'staff-edit' staff_id=staff.id %}'">
                             Edit
                         </button>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-danger"
-                                onclick="location.href='{% url 'staff-remove' company_id=company_id staff_id=staff.id %}'"
+                                onclick="location.href='{% url 'staff-remove' staff_id=staff.id %}'"
                                 name="hi">
                             Remove
                         </button>

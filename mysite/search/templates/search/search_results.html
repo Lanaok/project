@@ -5,9 +5,9 @@
     {% endif %}
     <div class="container">
         <div class="row row-cols-3">
-            {% for company in company_list %}
+            {% for object in object_list %}
                 <div class="col px-lg-5 py-3">
-                    {% include "company/card.html" with object=company %}
+                    {% include "company/card.html" with object=object %}
                 </div>
             {% endfor %}
         </div>

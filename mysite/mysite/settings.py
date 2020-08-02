@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'profile',
     'order',
     'company',
+
     'crispy_forms',
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_ID = 1
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -68,8 +70,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
                  os.path.join(BASE_DIR, 'profile', 'templates'),
-                 os.path.join(BASE_DIR, 'company', 'templates'),
-                 os.path.join(BASE_DIR, 'order', 'templates'), ],
+                 os.path.join(BASE_DIR, 'company', 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

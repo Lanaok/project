@@ -16,11 +16,12 @@ urlpatterns = [
     path('<int:company_id>/staff/<int:staff_id>/remove', views.remove_staff, name='staff-remove'),
 
     path('<int:company_id>/services/', views.list_service, name='service-list'),
-    path('<int:company_id>/order/', MakeOrder, name='make-order'),
+
     path('<int:company_id>/service/add', views.edit_service, name='service-add'),
     path('<int:company_id>/service/<int:service_id>', views.edit_service, name='service-view'), # todo change to view.
     path('<int:company_id>/service/<int:service_id>/edit/', views.edit_service, name='service-edit'),
     path('<int:company_id>/service/<int:service_id>/remove/', views.remove_service, name='service-remove'),
+    path('<int:service_id>/order/', MakeOrder, name='make-order'),
 
 ]
 

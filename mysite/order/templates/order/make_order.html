@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
-{% block content %}
 {% load crispy_forms_tags %}
-<body>
+{% crispy form form.helper %}
+{% block content %}
+
 
 <!-- Book An Oppointment Area Start -->
 <section class="book-an-oppointment-area section-padding-100 bg-img bg-gradient-overlay jarallax clearfix">
@@ -11,7 +12,7 @@
             <!-- Section Heading -->
             <div class="col-12">
                 <div class="section-heading text-center white">
-                    <h2>Book An Apointment</h2>
+                    <h2>Book An Appointment</h2>
                     <div class="line"></div>
                 </div>
             </div>
@@ -22,69 +23,77 @@
                 <!-- Appointment Form -->
                 <div class="appointment-form">
                     <form action="#" method="post">
+                        {% csrf_token %}
+                        <body class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-30">
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
-
-                                    <p><strong> user name:</strong> {{username}} </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
-
-                                    <p> Choose Service and Staff: </p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
-                                    {{ order_form|crispy }}
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
-                                    <select name="your-scheldule" class="form-control">
-                                        <option value="Choose Your Time">Choose Your Time</option>
-                                        <option value="9 AM to 10 AM">9 AM to 10 AM</option>
-                                        <option value="11 AM to 12 PM">11 AM to 12 PM</option>
-                                        <option value="2 PM to 4 PM">2 PM to 4 PM</option>
-                                        <option value="8 PM to 10 PM">8 PM to 10 PM</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
-                                    <select name="your-time" class="form-control">
-                                        <option value="Choose Your Day">Choose Your Day</option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                        <option value="Saturday">Saturday</option>
-                                        <option value="Sunday">Sunday</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group mb-30">
-                                    <textarea name="your-message" class="form-control"
-                                              placeholder="Your Message"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn dento-btn">Booking Now</button>
+                                <p><strong> user name:</strong> {{username}} </p>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-30">
+
+                                <p> Choose Service and Staff: </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-30">
+                                {% for s in staff %}
+                                <strong>{{ s }} </strong>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-30">
+                                <select name="your-schedule" class="form-control">
+                                    <option value="Choose Your Time">Choose Your Time</option>
+                                    <option value="9 AM to 10 AM">9 AM to 10 AM</option>
+                                    <option value="11 AM to 12 PM">11 AM to 12 PM</option>
+                                    <option value="2 PM to 4 PM">2 PM to 4 PM</option>
+                                    <option value="8 PM to 10 PM">8 PM to 10 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-30">
+                                <select name="your-time" class="form-control">
+                                    <option value="Choose Your Day">Choose Your Day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-30">
+                                    <textarea name="your-message" class="form-control"
+                                              placeholder="Your Message"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn dento-btn">Booking Now</button>
+                        </div>
+                        <div>
+                        </div>
+
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
 <!-- Book An Oppointment Area End -->
 
 

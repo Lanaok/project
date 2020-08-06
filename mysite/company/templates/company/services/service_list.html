@@ -12,30 +12,6 @@
                 <div class="col px-lg-5 py-3">
                     {% include "company/card.html" with object=service %}
                 </div>
-                {#                <div class="row col-sm-auto mb-2">#}
-                {#                    <div class="col">#}
-                {#                        <a href="{{ service.get_absolute_url }}"> {{ service.name }}</a>#}
-                {#                    </div>#}
-                {#                    <div class="col">#}
-                {#                        <button type="button" class="btn btn-primary"#}
-                {#                                onclick="location.href='{% url 'service-edit' company_id=service.company_id service_id=service.id %}'">#}
-                {#                            Edit#}
-                {#                        </button>#}
-                {#                    </div>#}
-                {#                    <div class="col">#}
-                {#                        <button type="button" class="btn btn-danger"#}
-                {#                                onclick="location.href='{% url 'service-remove' service_id=service.id %}'"#}
-                {#                                name="hi">#}
-                {#                            Remove#}
-                {#                        </button>#}
-                {#                    </div>#}
-                {#                    <div class="col">#}
-                {#                        <button type="submit" class="btn btn-primary"#}
-                {#                                onclick="location.href='{% url 'make-order' service_id=service.id %}'">#}
-                {#                            Make An Appointment#}
-                {#                        </button>#}
-                {#                    </div>#}
-                {#                </div>#}
             {% endfor %}
         </div>
     </div>

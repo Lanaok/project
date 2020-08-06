@@ -30,23 +30,20 @@
                                     <p><strong> user name:</strong> {{username}} </p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
-
-                                    <p> Choose Service and Staff: </p>
-                                </div>
-                            </div>
 
                             <div class="col-md-6">
                                 <div class="form-group mb-30">
-                                    {% for s in staff %}
-                                    <strong>{{ s }} </strong>
-                                    {% endfor %}
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect1">choose your staff member</label>
+                                        <select name="your-staff" class="form-control" id="exampleFormControlSelect1">
+                                            {% for s in staff %}
+                                            <option>{{ s }}</option>
+                                            {% endfor %}
 
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-
-
                             <div class="col-md-6">
                                 <div class="form-group mb-30">
                                     <select name="your-schedule" class="form-control">

@@ -18,7 +18,7 @@ from profile.models import Profile
 from django import forms
 
 
-def MakeOrder(request, service_id):
+def makeorder(request, service_id):
     service_requested = Service.objects.get(pk=service_id)
     company = service_requested.company
 
@@ -26,16 +26,16 @@ def MakeOrder(request, service_id):
     staff_list = StaffMember.objects.filter(services=service_requested)
 
     order_instance = Order()
-
+    order_form = OrderForm(instance=order_instance)
     if request.method == 'POST':
         staff_member = request.POST['your-staff']
-        time = request.POST['your-schedule']
-        day = request.POST['your-time']
+        time = request.POST['order_time']
+        day = request.POST['order_day']
         message = request.POST['your-message']
         email_from = request.user.email  # ?
         manager = Manager.objects.get(company=company)
-        message_for_send = message + ' ' + str(time) + ' ' + str(day) + ' ' + str(
-            service_requested.name) + ' with staff ' + str(staff_member)
+        message_for_send = message + ' service- ' + str(
+            service_requested.name) + ' on ' + str(day) + ' at ' + str(time) + ' with staff ' + str(staff_member)
         manager_email = manager.profile.user.email
         send_mail(name, message_for_send, email_from, list(manager_email))
         order_instance.service_order = service_requested
@@ -44,6 +44,7 @@ def MakeOrder(request, service_id):
         order_instance.staff_order = StaffMember.objects.get(profile=staff_profile)
         order_instance.user_orders = Profile.objects.get(user=request.user)
         order_instance.save()
+
         return render(request, 'order/appointment.html')
 
-    return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list})
+    return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_time': order_form})

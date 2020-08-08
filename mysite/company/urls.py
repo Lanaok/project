@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from order.views import MakeOrder
+from order.views import makeorder
 
 urlpatterns = [
     path('<int:company_id>/', views.view_company, name='company-detail'),
@@ -22,6 +22,6 @@ urlpatterns = [
     path('<int:company_id>/service/<int:service_id>/edit/', views.edit_service, name='service-edit'),
     path('service/<int:service_id>/', views.view_service, name='service-view'),
     path('service/<int:service_id>/remove/', views.remove_service, name='service-remove'),
-    path('<int:service_id>/order/', MakeOrder, name='make-order'),
+    path('<int:service_id>/order/', makeorder, name='make-order'),
 
 ]

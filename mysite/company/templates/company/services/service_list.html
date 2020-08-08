@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    {% for company in company_list %}
+{% for company in company_list %}
 
-    {% endfor %}
-    </div>
-    </div>
-    <div class="container">
-        <div class="row row-cols-3">
-            {% for service in services %}
-                <div class="col px-lg-5 py-3">
-                    {% include "company/card.html" with object=service %}
-                </div>
-            {% endfor %}
+{% endfor %}
+</div>
+</div>
+<div class="container">
+    <div class="row row-cols-3">
+        {% for service in services %}
+        <div class="col px-lg-5 py-3">
+            {% include "company/card.html" with object=service %}
         </div>
-    </div>
+        {% endfor %}
 
+    </div>
+</div>
+<div class="container">
+
+    <button type="button" class="btn btn-primary"
+            onclick="location.href='{% url 'service-add' company_id=company_id %}'"> Add Service
+    </button>
+
+</div>
 {% endblock %}

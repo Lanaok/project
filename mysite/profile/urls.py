@@ -6,4 +6,5 @@ urlpatterns = [
     # path('', views.contact),
     path('update/', views.update_profile, name='profile-update'),
     path('', views.view_profile, name='profile-detail'),
+    path('orders/', views.view_orders, name='profile-orders'),
 ]

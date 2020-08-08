@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render
 
 from .forms import UserForm, ProfileForm
+from order.models import Order
+from .models import Profile
 
 
 def view_profile(request):
@@ -24,4 +26,13 @@ def update_profile(request):
     return render(request, 'profile/profile_form.html', {
         'user_form': user_form,
         'profile_form': profile_form
+    })
+
+
+def view_orders(request):
+    # user_profile = Profile.objects.get(pk=profile_id)
+    user_profile = Profile.objects.get(user=request.user)
+    order_list = Order.objects.filter(user_orders=user_profile)
+    return render(request, 'profile/profile_order.html', {
+        'profile_order_list': order_list
     })

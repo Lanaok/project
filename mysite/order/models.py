@@ -14,3 +14,6 @@ class Order(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     order_time = models.DateField(null=True, blank=True)
     order_day = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return self.service_order.name

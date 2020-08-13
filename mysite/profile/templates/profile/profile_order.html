@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-{% for ord in profile_order_list %}
-{{ ord }}
-{% endfor %}
+<div class="container">
+    <div class="row row-cols-3">
+        {% for order in profile_order_list %}
+        <div class="col px-lg-5 py-3">
+            {% include "company/card.html" with object=order %}
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
 {% endblock %}

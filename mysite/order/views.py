@@ -48,3 +48,19 @@ def makeorder(request, service_id):
         return render(request, 'order/appointment.html')
 
     return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_time': order_form})
+
+
+def order_view(request, order_id):
+    return render(request, 'order/order_detail.html',
+                  {'order': Order.objects.get(pk=order_id)})
+
+
+def order_change(request, order_id):
+    return render(request, 'order/order_change.html',
+                  {'order': Order.objects.get(pk=order_id)})
+
+
+def order_remove(request, order_id):
+    user_order = Order.objects.get(pk=order_id)
+    user_order.delete()
+    return render(request, 'order/order_remove.html',)

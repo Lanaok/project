@@ -2,6 +2,7 @@ from django.db import models
 from company.models import Company
 from company.models import Service
 from company.models import StaffMember
+from django.urls import reverse
 from profile.models import Profile
 from django.utils import timezone
 
@@ -17,3 +18,6 @@ class Order(models.Model):
 
     def __str__(self):
         return self.service_order.name
+
+    def get_absolute_url(self):
+        return reverse('order-view', args=[str(self.id)])

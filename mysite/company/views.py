@@ -1,5 +1,4 @@
-from django.core.exceptions import PermissionDenied, ValidationError
-from django.db import IntegrityError
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
@@ -145,7 +144,7 @@ def edit_service(request, company_id, service_id=None):
     service_form = ServiceForm(instance=service_instance)
 
     if request.method == 'POST':
-        service_form = ServiceForm(request.POST, instance=service_instance)
+        service_form = ServiceForm(request.POST, instance=service_instance, files=request.FILES)
         if service_form.is_valid():
             service_instance: Service = service_form.save(commit=False)
             service_instance.company = company

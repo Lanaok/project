@@ -1,7 +1,13 @@
+{% load static %}
 <div class="card" style="width: 18rem;">
     <a href="{{ object.get_absolute_url }}">
-        <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
-             class="card-img-top" alt="...">
+        {% if object.image %}
+            <img src="{{ object.image.url }}"
+                 class="card-img-top" alt="...">
+        {% else %}
+            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
+                 class="card-img-top" alt="...">
+        {% endif %}
     </a>
     <div class="card-body">
         <h5 class="card-title"><a href="{{ object.get_absolute_url }}"> {{ object.name }}</a></h5>

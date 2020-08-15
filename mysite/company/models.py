@@ -45,7 +45,7 @@ class Service(models.Model):
     description = models.TextField(max_length=200)
     price = models.PositiveIntegerField(default=0)
     duration = models.DurationField(default=timedelta(days=0))
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to='service_photos/')
     company = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):

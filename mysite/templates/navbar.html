@@ -15,12 +15,14 @@
         </ul>
         {% include 'search/searchbar.html' %}
         <ul class="navbar-nav ml-auto">
-            <div class="btn-group">
-                <button class="btn btn-primary" type="button">
-                    <i class="fa fa-bell" style="color: white"></i>
-                    (0)
-                </button>
-            </div>
+            <a href="{% url 'notifications-view' %}"
+               title="Notifications"
+               class="btn {% if notification_count == 0 %} btn-light {% else %} btn-info{% endif %} "
+               style="text-decoration: none"
+               type="button">
+                <i class="fa fa-bell"></i>
+                ({{ notification_count }})
+            </a>
             {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

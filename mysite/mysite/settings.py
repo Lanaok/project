@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'order',
     'company',
     'search',
+    'notification',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_ID = 1
@@ -81,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
                 'django.template.context_processors.media',
+                'notification.context_processor.add_variable_to_context'
             ],
         },
     },

@@ -26,6 +26,7 @@ urlpatterns = [
     path('profile/', include('profile.urls')),
     path('company/', include('company.urls')),
     path('search/', include('search.urls')),
+    path('notifications/', include('notification.urls')),
     # path('order/', include('order.urls')),
     path('', views.CompanyList.as_view())
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

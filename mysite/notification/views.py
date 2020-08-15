@@ -1,11 +1,17 @@
-from django.shortcuts import render, redirect
-
+from django.shortcuts import redirect
 # Create your views here.
+from django.views.generic import ListView
+
 from notification.models import Notification
 
 
-def list_notifications(request):
-    return render(request, 'notification/view_notifications.html', {"notifications": Notification.objects.all()})
+class NotificationList(ListView):
+    model = Notification
+    template_name = 'notification/view_notifications.html'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Notification.objects.order_by('date_created')
 
 
 def mark_all_as_read(request):

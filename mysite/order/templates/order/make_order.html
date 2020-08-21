@@ -3,77 +3,177 @@
 {% block content %}
 
 
-<!-- Book An Oppointment Area Start -->
-<section class="book-an-oppointment-area section-padding-100 bg-img bg-gradient-overlay jarallax clearfix">
+    <!-- Book An Oppointment Area Start -->
+    <section class="book-an-oppointment-area section-padding-100 bg-img bg-gradient-overlay jarallax clearfix">
 
-    <div class="container">
-        <div class="row">
-            <!-- Section Heading -->
-            <div class="col-12">
-                <div class="section-heading text-center white">
-                    <h2>Book An Appointment</h2>
-                    <div class="line"></div>
+        <div class="container">
+            <div class="row">
+                <!-- Section Heading -->
+                <div class="col-12">
+                    <div class="section-heading text-center white">
+                        <h2>Book An Appointment</h2>
+                        <div class="line"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-12">
-                <!-- Appointment Form -->
-                <div class="appointment-form">
-                    <form action="#" method="post">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-30">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Appointment Form -->
+                    <div class="appointment-form">
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-30">
 
-                                    <p><strong> user name:</strong> {{username}} </p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group mb-25">
-                                    <div class="form-group">
-                                        <label for="exampleFormControlSelect1">choose your staff member</label>
-                                        <select name="your-staff" class="form-control" id="exampleFormControlSelect1">
-                                            {% for s in staff %}
-                                            <option>{{ s }}</option>
-                                            {% endfor %}
-
-                                        </select>
+                                        <p><strong> user name:</strong> {{ username }} </p>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-12">
-                                <div class="form-group mb-25">
-                                    {{ order_time }}
+                                <div class="col-md-12">
+                                    <div class="form-group mb-25">
+                                        <div class="form-group">
+                                            <label for="staffCombo">choose your staff member</label>
+                                            <select name="your-staff" class="form-control"
+                                                    id="staffCombo">
+                                                {% for s in staff %}
+                                                    <option data-id="{{ s.id }}">{{ s }}</option>
+                                                {% endfor %}
+
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group mb-25">
+                                        {{ order_time }}
+                                    </div>
+                                </div>
 
 
-                            <div class="col-12">
-                                <div class="form-group mb-30">
+                                <div class="col-12">
+                                    <div class="form-group mb-30">
                                     <textarea name="your-message" class="form-control"
                                               placeholder="Your Message"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn dento-btn">Booking Now</button>
                                 </div>
                             </div>
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn dento-btn">Booking Now</button>
-                            </div>
-                        </div>
-                    </form>
-
-
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
+
+
+    <!-- Book An Oppointment Area End -->
+
+    <div class="container mt-5">
+        <h3 class="card-header" id="monthAndYear">Monday, Aug 17</h3>
+        <div style="overflow:auto;">
+            <table class="table table-bordered table-responsive" id="calendar">
+                <thead>
+                <tr id="calendar-head-row" class="btn-group">
+                </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-</section>
+
+    {% block javascript %}
+        <script>
+            function drawTopRow(from, to) {
+                calTopRow = document.getElementById("calendar-head-row")
+                calTopRow.innerHTML = ""
+                for (let i = from; i < to; i++) {
+                    col = document.createElement("th")
+                    colText = document.createTextNode(i + ":00")
+                    col.id = `time_cell_${i}`
+                    col.appendChild(colText)
+                    calTopRow.appendChild(col)
+                }
+            }
+
+            function getGradient(percent) {
+                return `background:  linear-gradient(to right, #efe3af ${percent}%,#ffffff ${percent}%)`
+            }
+
+            function getGradientToLeft(percent) {
+                return `background:  linear-gradient(to left, #efe3af ${percent}%,#ffffff ${percent}%)`
+            }
+
+            // from, to is in hours double value
+            function setColorOfCell(from, to) {
+                max_min = 21 * 60 - 8 * 60
+                from_min = from * 60
+                to_min = to * 60
+                cell_count = to - from
+                for (let i = Math.ceil(from); i < parseInt(to); i++) {
+                    document.getElementById(`time_cell_${i}`).style = getGradient(100)
+                    document.getElementById(`time_cell_${i}`).dataset['percentage'] = 100
+                }
+                var remainder_end = to - parseInt(to)
+                if (remainder_end !== 0) {
+                    document.getElementById(`time_cell_${parseInt(to)}`).style = getGradient(remainder_end * 100)
+                    document.getElementById(`time_cell_${parseInt(to)}`).dataset['percentage'] = remainder_end * 100
+                    document.getElementById(`time_cell_${parseInt(to)}`).dataset['direction'] = 'right'
+                }
+
+                var remainder_start = from - parseInt(from)
+                if (remainder_start !== 0) {
+                    document.getElementById(`time_cell_${parseInt(from)}`).style = getGradientToLeft(remainder_start * 100)
+                    document.getElementById(`time_cell_${parseInt(from)}`).dataset['percentage'] = remainder_start * 100
+                    document.getElementById(`time_cell_${parseInt(from)}`).dataset['direction'] = 'left'
+                }
+            }
+
+            function setScheduleTitle(title) {
+                document.getElementById("monthAndYear").innerText = title
+            }
+
+            drawTopRow(8, 22)
+            var count = 0;
+
+            function onChange() {
+                if (count !== 0) {
+                    count = 0
+                    return
+                }
+                count++
+                chosenDate = document.getElementById("id_order_day").value
+                setScheduleTitle(chosenDate)
+
+                $.ajax({
+                    url: '{% url 'get-staff-schedule' %}',
+                    data: {
+                        'staff_id': $("#staffCombo option:selected").data('id'),
+                        'date': chosenDate
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        result = data['result']
+                        drawTopRow(8, 22)
+                        for (let i = 0; i < result.length; i++) {
+                            splitTime = result[i]['from'].split(':')
+                            from = parseInt(splitTime[0]) + parseFloat(splitTime[1] / 60)
+                            to = from + parseInt(result[i]['duration'])
+                            console.log(from + ' ' + to)
+                            setColorOfCell(from, to)
+                        }
+                    }
+                });
+            }
 
 
-<!-- Book An Oppointment Area End -->
-
-
+            $("#id_order_day").on('change', onChange);
+            $("#staffCombo").on('change', onChange);
+            onChange()
+        </script>
+    {% endblock %}
 {% endblock %}
 

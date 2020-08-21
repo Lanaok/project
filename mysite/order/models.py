@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from company.models import Company
 from company.models import Service
@@ -19,8 +20,8 @@ class Order(models.Model):
     service_order = models.ForeignKey(Service, null=True, on_delete=models.SET_NULL)
     staff_order = models.ForeignKey(StaffMember, null=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
-    order_time = models.DateField(null=True, blank=True)
-    order_day = models.DateField(null=True, blank=True)
+    order_time = models.TimeField(default=timezone.now,null=False, blank=False)
+    order_day = models.DateField(default=timezone.now,null=False, blank=False)
     order_state = models.CharField(choices=OrderState.choices, max_length=10)
 
     def __str__(self):

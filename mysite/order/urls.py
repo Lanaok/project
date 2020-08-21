@@ -1,8 +1,7 @@
-from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import path
 
 from order import views
-urlpatterns = [
 
+urlpatterns = [
+    path('get_staff_schedule/', views.get_staff_schedule, name='get-staff-schedule'),
 ]

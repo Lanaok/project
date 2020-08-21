@@ -9,9 +9,9 @@ from company.forms import CompanyForm
 from company.forms import ServiceForm
 from company.models import Company, StaffMember
 from company.models import Service
+from order.models import Order
 from profile import models
 from profile.models import Manager, Profile
-from order.models import Order
 
 
 def edit_company(request, company_id=None):
@@ -60,8 +60,8 @@ def remove_company(request, company_id):
 
 
 def view_my_companies(request):
-    company_manager = Manager.objects.all().filter(profile=request.user.profile)
-    if company_manager is not None:
+    company_manager = request.user.profile.manager
+    if company_manager:
         return render(request, 'company/company/company_list.html',
                       {'company_list': Company.objects.all().filter(manager=company_manager),
                        'paginate': False, 'title': 'My Companies'})

@@ -1,8 +1,7 @@
-from .models import Order
 from django import forms
-from crispy_forms.helper import FormHelper
-from django.forms import TextInput, Textarea, Select, NumberInput, TimeInput, FileInput
-from django.forms import ModelForm, TextInput, DateInput
+from django.forms import DateInput
+
+from .models import Order
 
 
 class OrderForm(forms.ModelForm):

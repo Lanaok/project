@@ -1,39 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if company %}
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-4">
-                    <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
-                         style="width: 18rem;"
-                         alt="...">
-                    <p><strong>Name: </strong>{{ company.name }}</p>
-                    <p><strong>Description: </strong>{{ company.description }}</p>
-                    <p><strong>Staff Members: </strong>
-                        {% for member in company.staffmember_set.all %}
-                            <strong>{{ member.profile.user.username }} </strong>
-                        {% endfor %}
-                    </p>
-                    <p><strong>Company Services: </strong>
-                        {% for service in company.service_set.all %}
-                            <strong>{{ service }} </strong>
-                        {% endfor %}
-                    </p>
-                    {% if company %}
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-auto">
-                                    <button onclick="location.href='{% url 'company-update' company_id=company.id %}'"
-                                            type="button"
-                                            class="btn btn-primary">
-                                        Edit Company
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
+{% if company %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
+                 style="width: 18rem;"
+                 alt="...">
+            <p><strong>Name: </strong>{{ company.name }}</p>
+            <p><strong>Description: </strong>{{ company.description }}</p>
+            <p><strong>Staff Members: </strong>
+                {% for member in company.staffmember_set.all %}
+                <strong>{{ member.profile.user.username }} </strong>
+                {% endfor %}
+            </p>
+            <p><strong>Company Services: </strong>
+                {% for service in company.service_set.all %}
+                <strong>{{ service }} </strong>
+                {% endfor %}
+            </p>
+            {% if company %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-auto">
+                        <button onclick="location.href='{% url 'company-update' company_id=company.id %}'"
+                                type="button"
+                                class="btn btn-primary">
+                            Edit Company
+                        </button>
+
+                    </div>
                 </div>
             </div>
+            {% endif %}
         </div>
-    {% endif %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}

@@ -11,6 +11,7 @@ from company.models import Company, StaffMember
 from company.models import Service
 from profile import models
 from profile.models import Manager, Profile
+from order.models import Order
 
 
 def edit_company(request, company_id=None):
@@ -59,9 +60,11 @@ def remove_company(request, company_id):
 
 
 def view_my_companies(request):
-    return render(request, 'company/company/company_list.html',
-                  {'company_list': Company.objects.all().filter(manager=request.user.profile.manager),
-                   'paginate': False, 'title': 'My Companies'})
+    company_manager = Manager.objects.all().filter(profile=request.user.profile)
+    if company_manager is not None:
+        return render(request, 'company/company/company_list.html',
+                      {'company_list': Company.objects.all().filter(manager=company_manager),
+                       'paginate': False, 'title': 'My Companies'})
 
 
 def staff_has_service(staff_instance, service_id):
@@ -170,6 +173,35 @@ def list_service(request, company_id):
 def view_service(request, service_id):
     return render(request, 'company/services/service_detail.html',
                   {'service': Service.objects.get(pk=service_id)})
+
+
+def view_company_orders(request, company_id):
+    company = Company.objects.get(pk=company_id)
+    service_list = Service.objects.all().filter(company=company)
+    orderlist = []
+    for service in service_list:
+        for order in Order.objects.all().filter(service_order=service):
+            orderlist.append(order)
+
+    return render(request, 'company/company/company_orders.html', {'orders': orderlist,
+                                                                   'company_id': company_id})
+
+
+def update_company_orders(request, company_id):
+    user = request.user
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        order_obj = Order.objects.get(pk=order_id)
+
+        if 'but1' in request.POST:
+            order_obj.order_state = 'approved'
+            order_obj.save()
+        elif 'but2' in request.POST:
+            order_obj.order_state = 'denied'
+            order_obj.save()
+
+    return redirect(reverse('company-order', args=(company_id,)))
+
 
 
 class CompanyList(ListView):

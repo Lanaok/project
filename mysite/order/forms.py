@@ -8,7 +8,7 @@ from django.forms import ModelForm, TextInput, DateInput
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        exclude = ['user_orders',  'staff_order', 'date_created', 'service_order']
+        exclude = ['user_orders',  'staff_order', 'date_created', 'service_order', 'order_state']
         fields = ['order_time', 'order_day']
         widgets = {
             'order_time': DateInput(attrs={'class': 'form-control', 'type': 'time'}),

@@ -41,6 +41,12 @@
                             class="btn btn-primary">
                         Edit
                     </button>
+                    <button onclick="location.href='{% url 'company-order'  company_id=company.id %}'"
+                            type="button"
+                            data-toggle="modal" data-target="#exampleModal"
+                            class="btn btn-primary">
+                        Company Orders
+                    </button>
                     {% include 'company/company/company_delete_button.html' with company_id=company.id %}
                     {% endif %}
                 </div>

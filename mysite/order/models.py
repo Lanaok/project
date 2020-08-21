@@ -9,12 +9,19 @@ from profile.models import Profile
 
 # Create your models here.
 class Order(models.Model):
+    class OrderState(models.TextChoices):
+        requested = 'RE', 'requested'
+        approved = 'AP', 'approved'
+        denied = 'DE', 'denied'
+        removed = 'REM', 'removed'
+
     user_orders = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     service_order = models.ForeignKey(Service, null=True, on_delete=models.SET_NULL)
     staff_order = models.ForeignKey(StaffMember, null=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
     order_time = models.DateField(null=True, blank=True)
     order_day = models.DateField(null=True, blank=True)
+    order_state = models.CharField(choices=OrderState.choices, max_length=10)
 
     def __str__(self):
         return self.service_order.name

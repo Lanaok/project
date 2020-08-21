@@ -3,9 +3,67 @@
 <div class="container">
     <div class="row row-cols-3">
         {% for order in profile_order_list %}
+
         <div class="col px-lg-5 py-3">
-            {% include "company/card.html" with object=order %}
+            {% if order.order_state == "RE" %}
+            <div class="card text-white bg-info mb-3" style="width: 18rem;">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.service_order.name }}</h5>
+                    <p class="card-text">{{order.service_order.description }} with staff member
+                        {{ order.staff_order }}
+                        at
+                        {{ order.order_time }}
+                        on
+                        {{ order.order_day }} </p>
+                    <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
+                </div>
+            </div>
+            {% elif order.order_state == 'denied' %}
+            <div class="card text-white bg-danger mb-3" style="width: 18rem;">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.service_order.name }}</h5>
+                    <p class="card-text">{{order.service_order.description }} with staff member
+                        {{ order.staff_order }}
+                        at
+                        {{ order.order_time }}
+                        on
+                        {{ order.order_day }}
+
+                    </p>
+                    <strong>This order was rejected from Company Manager</strong>
+
+                </div>
+            </div>
+            {% elif order.order_state == 'approved' %}
+            <div class="card text-white bg-success mb-3" style="width: 18rem;">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.service_order.name }}</h5>
+                    <p class="card-text">{{order.service_order.description }} with staff member
+                        {{ order.staff_order }}
+                        at
+                        {{ order.order_time }}
+                        on
+                        {{ order.order_day }} </p>
+                    <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="card text-white bg-secondary mb-3" style="width: 18rem;">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.service_order.name }}</h5>
+                    <p class="card-text">{{order.service_order.description }} This Order was deleted </p>
+
+                </div>
+            </div>
+            {% endif %}
+
+
         </div>
+
         {% endfor %}
 
     </div>

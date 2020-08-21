@@ -43,6 +43,7 @@ def makeorder(request, service_id):
         staff_profile = Profile.objects.get(user=user)
         order_instance.staff_order = StaffMember.objects.get(profile=staff_profile)
         order_instance.user_orders = Profile.objects.get(user=request.user)
+        order_instance.order_state = 'RE'
         order_instance.save()
 
         return render(request, 'order/appointment.html')
@@ -51,8 +52,9 @@ def makeorder(request, service_id):
 
 
 def order_view(request, order_id):
+    my_order = Order.objects.get(pk=order_id)
     return render(request, 'order/order_detail.html',
-                  {'order': Order.objects.get(pk=order_id)})
+                  {'order': my_order})
 
 
 def order_change(request, order_id):
@@ -62,5 +64,9 @@ def order_change(request, order_id):
 
 def order_remove(request, order_id):
     user_order = Order.objects.get(pk=order_id)
-    user_order.delete()
-    return render(request, 'order/order_remove.html',)
+    user_order.order_state = "REM"
+    user_order.save()
+    return render(request, 'order/order_remove.html', )
+
+
+

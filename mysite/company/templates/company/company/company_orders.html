@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row row-cols-3">
+        {% for order in orders %}
+        <form action="{% url 'update-order' company_id=company_id %}" method="POST" class="ui form">
+            {% csrf_token %}
+            <input type="hidden" name='order_id' value="{{ order.id }}">
+            <div class="col px-lg-5 py-3">
+                {% if order.order_state == "RE" %}
+                <div class="card text-white bg-info mb-3" style="width: 18rem;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.service_order.name }}</h5>
+                        <p class="card-text">{{order.service_order.description }} with staff member
+                            {{ order.staff_order }}
+                            at
+                            {{ order.order_time }}
+                            on
+                            {{ order.order_day }} </p>
+                        <button name='but1' type="submit" class="btn btn-success">Accept</button>
+                        <button name='but2' type="submit" class="btn btn-danger">Reject</button>
+                    </div>
+                </div>
+                {% elif order.order_state == 'denied' %}
+                <div class="card text-white bg-danger mb-3" style="width: 18rem;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.service_order.name }}</h5>
+                        <p class="card-text">{{order.service_order.description }} with staff member
+                            {{ order.staff_order }}
+                            at
+                            {{ order.order_time }}
+                            on
+                            {{ order.order_day }} </p>
+
+                    </div>
+                </div>
+                {% elif order.order_state == 'approved' %}
+                <div class="card text-white bg-success mb-3" style="width: 18rem;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.service_order.name }}</h5>
+                        <p class="card-text">{{order.service_order.description }} with staff member
+                            {{ order.staff_order }}
+                            at
+                            {{ order.order_time }}
+                            on
+                            {{ order.order_day }} </p>
+
+                    </div>
+                </div>
+                {% else %}
+                <div class="card text-white bg-secondary mb-3" style="width: 18rem;">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ order.service_order.name }}</h5>
+                        <p class="card-text">{{order.service_order.description }} This Order was deleted by the user</p>
+
+                    </div>
+                </div>
+                {% endif %}
+
+
+            </div>
+
+        </form>
+
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

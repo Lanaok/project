@@ -40,6 +40,7 @@ def makeorder(request, service_id):
         staff_profile = Profile.objects.get(user=user)
         order_instance.staff_order = StaffMember.objects.get(profile=staff_profile)
         order_instance.user_orders = Profile.objects.get(user=request.user)
+        order_instance.order_state = 'RE'
         order_instance.order_day = day
         order_instance.order_time = time
         order_instance.save()

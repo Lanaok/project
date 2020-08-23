@@ -8,7 +8,7 @@ from notification.models import Notification
 class NotificationList(ListView):
     model = Notification
     template_name = 'notification/view_notifications.html'
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         return Notification.objects.order_by('date_created')

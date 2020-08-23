@@ -135,7 +135,7 @@ def remove_staff(request, staff_id):
 class StaffList(ListView):
     model = StaffMember
     template_name = "company/staff/staff_list.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         return StaffMember.objects.filter(company_id=self.kwargs['company_id']).order_by('date_joined')
@@ -172,10 +172,18 @@ def remove_service(request, service_id):
     return redirect(reverse('service-list', args=(company_id,)))
 
 
-def list_service(request, company_id):
-    return render(request, 'company/services/service_list.html',
-                  {'services': Service.objects.filter(company_id=company_id),
-                   'company': Company.objects.get(pk=company_id)})
+class ServiceList(ListView):
+    model = Service
+    template_name = "company/services/service_list.html"
+    paginate_by = 6
+
+    def get_queryset(self):
+        return Service.objects.filter(company_id=self.kwargs['company_id']).order_by('name')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=self.kwargs['company_id'])
+        return context
 
 
 def view_service(request, service_id):
@@ -250,7 +258,7 @@ def update_company_orders(request, company_id):
 class CompanyList(ListView):
     model = Company
     template_name = "company/company/company_list.html"
-    paginate_by = 5
+    paginate_by = 6
 
     def get_queryset(self):
         return Company.objects.all().order_by('name')

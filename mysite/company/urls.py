@@ -22,7 +22,7 @@ urlpatterns = [
     path('staff/<int:staff_id>/', views.view_staff, name='staff-view'),
     path('staff/<int:staff_id>/remove', views.remove_staff, name='staff-remove'),
 
-    path('<int:company_id>/services/', views.list_service, name='service-list'),
+    path('<int:company_id>/services/', views.ServiceList.as_view(), name='service-list'),
     path('<int:company_id>/service/add', views.edit_service, name='service-add'),
     path('<int:company_id>/service/<int:service_id>/edit/', views.edit_service, name='service-edit'),
     path('service/<int:service_id>/', views.view_service, name='service-view'),

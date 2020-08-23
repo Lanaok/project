@@ -90,7 +90,7 @@ def add_staff(request, company_id):
                 staff_member.save()
                 for checked_service_id in staff_service_list:
                     staff_member.services.add(checked_service_id)
-                return redirect(reverse('staff-view', args=(staff_member.id,)))
+                return redirect(reverse('staff-list', args=(staff_member.company_id,)))
         except models.Profile.DoesNotExist:
             error_message = "could not find user"
 
@@ -132,10 +132,18 @@ def remove_staff(request, staff_id):
     return redirect(reverse('staff-list', args=(company_id,)))
 
 
-def list_staff(request, company_id):
-    return render(request, 'company/staff/staff_list.html',
-                  {'staff_list': StaffMember.objects.filter(company_id=company_id),
-                   'company_id': company_id})
+class StaffList(ListView):
+    model = StaffMember
+    template_name = "company/staff/staff_list.html"
+    paginate_by = 5
+
+    def get_queryset(self):
+        return StaffMember.objects.filter(company_id=self.kwargs['company_id']).order_by('date_joined')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=self.kwargs['company_id'])
+        return context
 
 
 def edit_service(request, company_id, service_id=None):
@@ -201,7 +209,6 @@ def update_company_orders(request, company_id):
             order_obj.save()
 
     return redirect(reverse('company-order', args=(company_id,)))
-
 
 
 class CompanyList(ListView):

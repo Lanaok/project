@@ -1,0 +1,8 @@
+{% url 'service-remove'  service_id=service_id as forward_link %}
+{% include 'company/modal/confirm_modal.html' with modal_id="hi" forward_link=forward_link modal_text="Are you sure you want to remove the service?" %}
+<button
+        type="button"
+        data-toggle="modal" data-target="#hi"
+        class="btn btn-danger">
+    Remove
+</button>

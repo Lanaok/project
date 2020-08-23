@@ -27,11 +27,7 @@
                             onclick="location.href='{% url 'service-edit' company_id=service.company_id service_id=service.id %}'">
                         Edit
                     </button>
-                    <button type="button" class="btn btn-danger"
-                            onclick="location.href='{% url 'service-remove' service_id=service.id %}'"
-                            name="hi">
-                        Remove
-                    </button>
+                    {% include 'company/services/service_delete_button.html' with service_id=service.id %}
                 </div>
             </div>
         {% endif %}

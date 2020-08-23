@@ -202,10 +202,10 @@ def update_company_orders(request, company_id):
         order_obj = Order.objects.get(pk=order_id)
 
         if 'but1' in request.POST:
-            order_obj.order_state = 'approved'
+            order_obj.order_state = Order.OrderState.approved
             order_obj.save()
         elif 'but2' in request.POST:
-            order_obj.order_state = 'denied'
+            order_obj.order_state = Order.OrderState.denied
             order_obj.save()
 
     return redirect(reverse('company-order', args=(company_id,)))

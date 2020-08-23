@@ -117,14 +117,14 @@
                     document.getElementById(`time_cell_${i}`).dataset['percentage'] = 100
                 }
                 var remainder_end = to - parseInt(to)
-                if (remainder_end !== 0) {
+                if (remainder_end !== 0 && to <= working_hour_to && to >= working_hour_from) {
                     document.getElementById(`time_cell_${parseInt(to)}`).style = getGradient(remainder_end * 100)
                     document.getElementById(`time_cell_${parseInt(to)}`).dataset['percentage'] = remainder_end * 100
                     document.getElementById(`time_cell_${parseInt(to)}`).dataset['direction'] = 'right'
                 }
 
                 var remainder_start = from - parseInt(from)
-                if (remainder_start !== 0) {
+                if (remainder_start !== 0 && from >= working_hour_from && from <= working_hour_to) {
                     document.getElementById(`time_cell_${parseInt(from)}`).style = getGradientToLeft(remainder_start * 100)
                     document.getElementById(`time_cell_${parseInt(from)}`).dataset['percentage'] = remainder_start * 100
                     document.getElementById(`time_cell_${parseInt(from)}`).dataset['direction'] = 'left'
@@ -134,12 +134,13 @@
             function setScheduleTitle(title) {
                 document.getElementById("monthAndYear").innerText = title
             }
+
             var working_hour_from = parseInt("{{ working_hour_from }}".split())
             var working_hour_to = parseInt("{{ working_hour_to }}".split())
-            if("{{ working_hour_from }}".includes("p.m.")){
+            if ("{{ working_hour_from }}".includes("p.m.")) {
                 working_hour_from += 12
             }
-            if("{{ working_hour_to }}".includes("p.m.")){
+            if ("{{ working_hour_to }}".includes("p.m.")) {
                 working_hour_to += 12
             }
             drawTopRow(working_hour_from, working_hour_to)
@@ -167,6 +168,7 @@
                         for (let i = 0; i < result.length; i++) {
                             splitTime = result[i]['from'].split(':')
                             from = parseInt(splitTime[0]) + parseFloat(splitTime[1] / 60)
+                            console.log(from)
                             to = from + parseInt(result[i]['duration'])
                             console.log(from + ' ' + to)
                             setColorOfCell(from, to)

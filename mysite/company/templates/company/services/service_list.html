@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    {% for company in company_list %}
-
-    {% endfor %}
     <div class="container">
         <div class="row row-cols-3">
             {% for service in services %}
                 <div class="col px-lg-5 py-3">
-                    {% include "company/card.html" with object=service %}
+                    {% include "company/services/service_card.html" with object=service %}
                 </div>
             {% endfor %}
-
+        </div>
+        <div class="row justify-content-center">
+            {% include 'paging.html' %}
         </div>
     </div>
 

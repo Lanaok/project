@@ -1,16 +1,25 @@
 {% load static %}
 <div class="card" style="width: 18rem;">
-    <a href="{{ object.get_absolute_url }}">
-        {% if object.image %}
-            <img src="{{ object.image.url }}"
-                 class="card-img-top" alt="...">
-        {% else %}
-            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
-                 class="card-img-top" alt="...">
-        {% endif %}
-    </a>
+    {% if staff.image %}
+        <img src="{{ staff.picture.url }}"
+             class="card-img-top" alt="...">
+    {% else %}
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+             class="card-img-top" alt="...">
+    {% endif %}
     <div class="card-body">
-        <h5 class="card-title"><a href="{{ object.get_absolute_url }}"> {{ object.name }}</a></h5>
-        <p class="card-text">{{ object.description }}</p>
+        <h5 class="card-title">{{ staff.profile.user.get_full_name }}</h5>
+        {#        <p class="card-text">{{ object.description }}</p>#}
+        {% if staff.company.manager.profile.user == user %}
+            <div class="row justify-content-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary"
+                            onclick="location.href='{% url 'staff-edit' staff_id=staff.id %}'">
+                        Edit
+                    </button>
+                    {% include 'company/staff/staff_delete_button.html' with staff_id=staff.id %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>

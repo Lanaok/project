@@ -40,7 +40,7 @@ def makeorder(request, service_id):
         staff_profile = Profile.objects.get(user=user)
         order_instance.staff_order = StaffMember.objects.get(profile=staff_profile)
         order_instance.user_orders = Profile.objects.get(user=request.user)
-        order_instance.order_state = 'RE'
+        order_instance.order_state = Order.OrderState.requested
         order_instance.order_day = day
         order_instance.order_time = time
         order_instance.save()
@@ -64,7 +64,7 @@ def order_change(request, order_id):
 
 def order_remove(request, order_id):
     user_order = Order.objects.get(pk=order_id)
-    user_order.order_state = "REM"
+    user_order.order_state = Order.OrderState.removed
     user_order.save()
     return render(request, 'order/order_remove.html', )
 
@@ -74,7 +74,7 @@ def get_staff_schedule(request):
         staff = StaffMember.objects.get(pk=request.GET['staff_id'])
         date = datetime.datetime.strptime(request.GET['date'], '%Y-%m-%d')
 
-        orders = list(Order.objects.filter(staff_order=staff, order_day=date))
+        orders = list(Order.objects.filter(staff_order=staff, order_day=date, order_state=Order.OrderState.approved))
         time_intervals = []
         for order in orders:
             time_intervals.append({'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})

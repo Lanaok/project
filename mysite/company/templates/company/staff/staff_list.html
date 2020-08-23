@@ -1,35 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
+
+
     <div class="container">
-        <div class="col-4">
-            {% for staff in  staff_list %}
-                <div class="row col-sm-auto mb-2">
-                    <div class="col">
-                        <a href="{{ staff.get_absolute_url }}"> {{ staff.profile.user.username }}</a>
-                    </div>
-                    {% if staff.company.manager.profile.user == user %}
-                        <div class="col">
-                            <button type="button" class="btn btn-primary"
-                                    onclick="location.href='{% url 'staff-edit' staff_id=staff.id %}'">
-                                Edit
-                            </button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-danger"
-                                    onclick="location.href='{% url 'staff-remove' staff_id=staff.id %}'"
-                                    name="hi">
-                                Remove
-                            </button>
-                        </div>
-                    {% endif %}
+        <div class="row row-cols-3">
+            {% for staff in staffmember_list %}
+                <div class="col">
+                    {% include 'company/staff/staff_card.html' with staff=staff %}
                 </div>
             {% endfor %}
-            {% if staff.company.manager.profile.user == user %}
-                <button type="button" class="btn btn-primary"
-                        onclick="location.href='{% url 'staff-add' company_id=company_id %}'"> Add Staff
-                </button>
-            {% endif %}
+        </div>
+        <div class="row justify-content-center">
+            {% include 'paging.html' %}
         </div>
     </div>
+    {% if company.manager.profile.user == user %}
+        <button type="button" class="btn btn-primary"
+                onclick="location.href='{% url 'staff-add' company_id=company.id %}'"> Add Staff
+        </button>
+    {% endif %}
+
 
 {% endblock %}

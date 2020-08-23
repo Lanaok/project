@@ -1,0 +1,35 @@
+{% load static %}
+<div class="card" style="width: 18rem;">
+    <a href="{{ object.get_absolute_url }}">
+        {% if object.image %}
+            <img src="{{ object.image.url }}"
+                 class="card-img-top" alt="...">
+        {% else %}
+            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
+                 class="card-img-top" alt="...">
+        {% endif %}
+    </a>
+    <div class="card-body">
+        <h5 class="card-title"><a href="{{ object.get_absolute_url }}"> {{ object.name }}</a></h5>
+        <p class="card-text">{{ object.description }}</p>
+
+        <div class="row justify-content-center mb-1">
+            <button type="submit" class="btn btn-primary"
+                    onclick="location.href='{% url 'make-order' service_id=service.id %}'">
+                Make An Appointment
+            </button>
+        </div>
+
+        {% if service.company.manager.profile.user == user %}
+            <div class="row justify-content-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary"
+                            onclick="location.href='{% url 'service-edit' company_id=service.company_id service_id=service.id %}'">
+                        Edit
+                    </button>
+                    {% include 'company/services/service_delete_button.html' with service_id=service.id %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

@@ -1,3 +1,4 @@
+import datetime
 from datetime import timedelta
 
 from django.contrib.auth.models import User
@@ -20,6 +21,8 @@ class Company(models.Model):
     description = models.TextField(max_length=500)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    working_hour_from = models.TimeField(default=datetime.time(9, 00), null=False, blank=False)
+    working_hour_to = models.TimeField(default=datetime.time(21, 00), null=False, blank=False)
     company_type = models.CharField(choices=CompanyType.choices, max_length=10)
 
     class Meta:
@@ -61,6 +64,7 @@ class StaffMember(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     services = models.ManyToManyField(Service)
     date_joined = models.DateTimeField(auto_now_add=True)
+    picture = models.ImageField(null=True, blank=True, upload_to='staff_photos/')
 
     def __str__(self):
         return self.profile.user.username

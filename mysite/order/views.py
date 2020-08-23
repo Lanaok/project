@@ -47,7 +47,9 @@ def makeorder(request, service_id):
 
         return render(request, 'order/appointment.html')
 
-    return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_time': order_form})
+    return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_time': order_form,
+                                                     'working_hour_from': company.working_hour_from,
+                                                     'working_hour_to': company.working_hour_to})
 
 
 def order_view(request, order_id):

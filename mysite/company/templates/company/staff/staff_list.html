@@ -7,24 +7,28 @@
                     <div class="col">
                         <a href="{{ staff.get_absolute_url }}"> {{ staff.profile.user.username }}</a>
                     </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary"
-                                onclick="location.href='{% url 'staff-edit' staff_id=staff.id %}'">
-                            Edit
-                        </button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-danger"
-                                onclick="location.href='{% url 'staff-remove' staff_id=staff.id %}'"
-                                name="hi">
-                            Remove
-                        </button>
-                    </div>
+                    {% if staff.company.manager.profile.user == user %}
+                        <div class="col">
+                            <button type="button" class="btn btn-primary"
+                                    onclick="location.href='{% url 'staff-edit' staff_id=staff.id %}'">
+                                Edit
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn btn-danger"
+                                    onclick="location.href='{% url 'staff-remove' staff_id=staff.id %}'"
+                                    name="hi">
+                                Remove
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
-            <button type="button" class="btn btn-primary"
-                    onclick="location.href='{% url 'staff-add' company_id=company_id %}'"> Add Staff
-            </button>
+            {% if staff.company.manager.profile.user == user %}
+                <button type="button" class="btn btn-primary"
+                        onclick="location.href='{% url 'staff-add' company_id=company_id %}'"> Add Staff
+                </button>
+            {% endif %}
         </div>
     </div>
 

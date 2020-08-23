@@ -72,7 +72,7 @@ TEMPLATES = [
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
                  os.path.join(BASE_DIR, 'profile', 'templates'),
                  os.path.join(BASE_DIR, 'company', 'templates'),
-                 os.path.join(BASE_DIR, 'order', 'templates'),],
+                 os.path.join(BASE_DIR, 'order', 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -152,5 +152,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'company-list'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'company-list'
-MEDIA_ROOT=os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'

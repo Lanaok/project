@@ -43,7 +43,6 @@ def makeorder(request, service_id):
         order_instance.order_state = 'RE'
         order_instance.order_day = day
         order_instance.order_time = time
-        order_instance.order_state = "RE"
         order_instance.save()
 
         return render(request, 'order/appointment.html')

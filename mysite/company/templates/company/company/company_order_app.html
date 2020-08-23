@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'company-order' company_id=company_id %}">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'company_order_req' company_id=company_id %}">Requested</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'company_order_app' company_id=company_id %}">Approved</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'company_order_rem' company_id=company_id %}">Removed</a>
+    </li>
+</ul>
+<div class="col px-lg-5 py-3">
+    <div class="row justify-content-center">
+        {% for order in orders %}
+        <form action="{% url 'update-order' company_id=company_id %}" method="POST" class="ui form">
+            {% csrf_token %}
+            <input type="hidden" name='order_id' value="{{ order.id }}">
+
+            {% if order.order_state == 'approved' %}
+            <div class="card text-white bg-success mb-3" style="width: 18rem;">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ order.service_order.name }}</h5>
+                    <p class="card-text">{{order.service_order.description }} with staff member
+                        {{ order.staff_order }}
+                        at
+                        {{ order.order_time }}
+                        on
+                        {{ order.order_day }} </p>
+
+                </div>
+            </div>
+            {% endif %}
+        </form>
+        {% endfor %}
+    </div>
+</div>
+            {% endblock %}

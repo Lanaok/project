@@ -29,6 +29,24 @@ def update_profile(request):
     })
 
 
+def order_requested(request):
+    user_profile = Profile.objects.get(user=request.user)
+    order_list = Order.objects.filter(user_orders=user_profile)
+
+    return render(request, 'profile/order_req.html', {'profile_order_list': order_list})
+
+def order_approved(request):
+    user_profile = Profile.objects.get(user=request.user)
+    order_list = Order.objects.filter(user_orders=user_profile)
+
+    return render(request, 'profile/order_app.html', {'profile_order_list': order_list})
+
+def order_removed(request):
+    user_profile = Profile.objects.get(user=request.user)
+    order_list = Order.objects.filter(user_orders=user_profile)
+
+    return render(request, 'profile/order_rem.html', {'profile_order_list': order_list})
+
 def view_orders(request):
     # user_profile = Profile.objects.get(pk=profile_id)
     user_profile = Profile.objects.get(user=request.user)

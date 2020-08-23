@@ -1,68 +1,77 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <div class="row row-cols-3">
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'profile-orders' %}">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'order_req' %}">Requested</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'order_app' %}">Approved</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'order_rem' %}">Removed</a>
+    </li>
+</ul>
+
+<div class="col px-lg-5 py-3">
+<div class="row justify-content-center">
         {% for order in profile_order_list %}
 
-        <div class="col px-lg-5 py-3">
-            {% if order.order_state == "RE" %}
-            <div class="card text-white bg-info mb-3" style="width: 18rem;">
 
-                <div class="card-body">
-                    <h5 class="card-title">{{ order.service_order.name }}</h5>
-                    <p class="card-text">{{order.service_order.description }} with staff member
-                        {{ order.staff_order }}
-                        at
-                        {{ order.order_time }}
-                        on
-                        {{ order.order_day }} </p>
-                    <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
-                </div>
+        {% if order.order_state == "RE" %}
+        <div class="card text-white bg-info mb-3" style="width: 18rem;">
+
+            <div class="card-body">
+                <h5 class="card-title">{{ order.service_order.name }}</h5>
+                <p class="card-text">{{order.service_order.description }} with staff member
+                    {{ order.staff_order }}
+                    at
+                    {{ order.order_time }}
+                    on
+                    {{ order.order_day }} </p>
+                <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
             </div>
-            {% elif order.order_state == 'denied' %}
-            <div class="card text-white bg-danger mb-3" style="width: 18rem;">
-
-                <div class="card-body">
-                    <h5 class="card-title">{{ order.service_order.name }}</h5>
-                    <p class="card-text">{{order.service_order.description }} with staff member
-                        {{ order.staff_order }}
-                        at
-                        {{ order.order_time }}
-                        on
-                        {{ order.order_day }}
-
-                    </p>
-                    <strong>This order was rejected from Company Manager</strong>
-
-                </div>
-            </div>
-            {% elif order.order_state == 'approved' %}
-            <div class="card text-white bg-success mb-3" style="width: 18rem;">
-
-                <div class="card-body">
-                    <h5 class="card-title">{{ order.service_order.name }}</h5>
-                    <p class="card-text">{{order.service_order.description }} with staff member
-                        {{ order.staff_order }}
-                        at
-                        {{ order.order_time }}
-                        on
-                        {{ order.order_day }} </p>
-                    <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
-                </div>
-            </div>
-            {% else %}
-            <div class="card text-white bg-secondary mb-3" style="width: 18rem;">
-
-                <div class="card-body">
-                    <h5 class="card-title">{{ order.service_order.name }}</h5>
-                    <p class="card-text">{{order.service_order.description }} This Order was deleted </p>
-
-                </div>
-            </div>
-            {% endif %}
-
-
         </div>
+        {% elif order.order_state == 'denied' or order.order_state == "REM" %}
+        <div class="card text-white bg-danger mb-3" style="width: 18rem;">
+
+            <div class="card-body">
+                <h5 class="card-title">{{ order.service_order.name }}</h5>
+                <p class="card-text">{{order.service_order.description }} with staff member
+                    {{ order.staff_order }}
+                    at
+                    {{ order.order_time }}
+                    on
+                    {{ order.order_day }}
+
+                </p>
+                {% if order.order_state == 'denied' %}
+                <strong>This order was rejected from Company Manager</strong>
+                {% else %}
+                <strong>This order was removed by the user</strong>
+                {% endif %}
+
+            </div>
+        </div>
+        {% elif order.order_state == 'approved' %}
+        <div class="card text-white bg-success mb-3" style="width: 18rem;">
+
+            <div class="card-body">
+                <h5 class="card-title">{{ order.service_order.name }}</h5>
+                <p class="card-text">{{order.service_order.description }} with staff member
+                    {{ order.staff_order }}
+                    at
+                    {{ order.order_time }}
+                    on
+                    {{ order.order_day }} </p>
+                <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
+            </div>
+        </div>
+
+        {% endif %}
+
 
         {% endfor %}
 

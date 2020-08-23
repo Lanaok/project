@@ -1,8 +1,8 @@
 {% url 'staff-remove'  staff_id=staff_id as forward_link %}
-{% include 'company/modal/confirm_modal.html' with modal_id="removeStaff" forward_link=forward_link modal_text="Are you sure you want to remove the staff member?" %}
+{% include 'company/modal/confirm_modal.html' with modal_id="exampleModal" forward_link=forward_link modal_text="Are you sure you want to remove the staff member?" %}
 <button
         type="button"
-        data-toggle="modal" data-target="#removeStaff"
+        data-toggle="modal" data-target="#exampleModal" data-forward-link="{{ forward_link }}"
         class="btn btn-danger">
     Remove
 </button>

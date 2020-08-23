@@ -167,7 +167,7 @@ def remove_service(request, service_id):
 def list_service(request, company_id):
     return render(request, 'company/services/service_list.html',
                   {'services': Service.objects.filter(company_id=company_id),
-                   'company_id': company_id})
+                   'company': Company.objects.get(pk=company_id)})
 
 
 def view_service(request, service_id):

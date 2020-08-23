@@ -10,11 +10,13 @@ from company.models import Service
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description', 'company_type']
+        fields = ['name', 'description', 'company_type', 'working_hour_from', 'working_hour_to']
         widgets = {
             'name': TextInput(attrs={'class': 'form-control'}),
             'description': Textarea(attrs={'class': 'form-control'}),
-            'company_type': Select(attrs={'class': 'form-control custom-select'}, )
+            'company_type': Select(attrs={'class': 'form-control custom-select'}),
+            'working_hour_from': TimeInput({'class': 'form-control', 'type': 'time'}),
+            'working_hour_to': TimeInput({'class': 'form-control', 'type': 'time'})
         }
 
     def __init__(self, *args, **kwargs):

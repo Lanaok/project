@@ -2,79 +2,55 @@
     <div class="container mt-5">
         <div class="row">
             {% for order in order_list %}
-                <div class="col-lg-4">
-                    {% if company_id %}
-                        <form action="{% url 'update-order' company_id=company_id %}" method="POST" class="ui form">
-                        {% csrf_token %}
-                        <input type="hidden" name='order_id' value="{{ order.id }}">
-                    {% endif %}
-                    {% if order.order_state == order.OrderState.requested %}
-                        <div class="card text-white bg-info mb-3" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ order.service_order.name }}</h5>
-                                <p class="card-text">{{ order.service_order.description }} with staff member
-                                    {{ order.staff_order }}
-                                    at
-                                    {{ order.order_time }}
-                                    on
-                                    {{ order.order_day }} </p>
-                                {% if company_id %}
+                <div class="col-lg-4 align-items-stretch d-flex">
+                    <div class="card text-white mb-3 w-100
+                        {% if order.order_state == order.OrderState.requested %}
+                            bg-info
+                         {% elif order.order_state == order.OrderState.denied %}
+                            bg-danger
+                        {% elif order.order_state == order.OrderState.removed %}
+                            bg-secondary
+                        {% elif order.order_state == order.OrderState.approved %}
+                            bg-success
+                        {% endif %}"
+                         style="width: 18rem;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ order.service_order.name }}</h5>
+                            <p class="card-text">{{ order.service_order.description }} with staff member
+                                {{ order.staff_order }}
+                                at
+                                {{ order.order_time }}
+                                on
+                                {{ order.order_day }} </p>
+
+                            {% if order.order_state == order.OrderState.denied %}
+                                <p><strong>This order was rejected from Company Manager</strong></p>
+                            {% elif order.order_state == order.OrderState.removed %}
+                                <p><strong>This order was removed by the user</strong></p>
+                            {% endif %}
+                            {% if company_id and order.order_state == order.OrderState.requested and company_id %}
+                                <form action="{% url 'update-order' company_id=company_id %}" method="POST"
+                                      class="ui form align-self-center" style="margin-top: auto;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name='order_id' value="{{ order.id }}">
                                     <button name='but1' type="submit" class="btn btn-success">Accept</button>
                                     <button name='but2' type="submit" class="btn btn-danger">Reject</button>
-                                {% else %}
-                                    <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
-                                {% endif %}
-                            </div>
+                                </form>
+                            {% else %}
+                                <a href="{{ order.get_absolute_url }}" class="btn btn-dark" style="margin-top: auto;">Order
+                                    details</a>
+                            {% endif %}
                         </div>
-                    {% elif order.order_state == order.OrderState.denied or order.order_state == order.OrderState.removed %}
-                        <div class="card text-white bg-danger mb-3" style="width: 18rem;">
 
-                            <div class="card-body">
-                                <h5 class="card-title">{{ order.service_order.name }}</h5>
-                                <p class="card-text">{{ order.service_order.description }} with staff member
-                                    {{ order.staff_order }}
-                                    at
-                                    {{ order.order_time }}
-                                    on
-                                    {{ order.order_day }}
-
-                                </p>
-                                {% if order.order_state == order.OrderState.denied %}
-                                    <strong>This order was rejected from Company Manager</strong>
-                                {% else %}
-                                    <strong>This order was removed by the user</strong>
-                                {% endif %}
-
-                            </div>
-                        </div>
-                    {% elif order.order_state == order.OrderState.approved %}
-                        <div class="card text-white bg-success mb-3" style="width: 18rem;">
-
-                            <div class="card-body">
-                                <h5 class="card-title">{{ order.service_order.name }}</h5>
-                                <p class="card-text">{{ order.service_order.description }} with staff member
-                                    {{ order.staff_order }}
-                                    at
-                                    {{ order.order_time }}
-                                    on
-                                    {{ order.order_day }} </p>
-                                <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
-                            </div>
-                        </div>
-                    {% endif %}
-                    {% if company_id %}
-                        </form>
-                    {% endif %}
+                    </div>
                 </div>
+
             {% endfor %}
         </div>
-    </div>
-
-
-    <div class="row justify-content-center">
-        {% include 'paging.html' %}
-    </div>
-    <script>
-        $("#{{ active_tab }}").addClass("active")
-    </script>
+        <div class="row justify-content-center">
+            {% include 'paging.html' %}
+        </div>
+        <script>
+            $("#{{ active_tab }}").addClass("active")
+        </script>
 {% endif %}

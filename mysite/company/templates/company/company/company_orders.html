@@ -14,6 +14,10 @@
                href="{% url 'company-order' company_id=company_id filter=order_states.approved %}">Approved</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" id="{{ order_states.denied }}-tab"
+               href="{% url 'company-order' company_id=company_id filter=order_states.denied %}">Denied</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" id="{{ order_states.removed }}-tab"
                href="{% url 'company-order' company_id=company_id filter=order_states.removed %}">Removed</a>
         </li>

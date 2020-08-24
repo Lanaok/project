@@ -1,61 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if company %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
-                 style="width: 18rem;"
-                 alt="...">
-            <p><strong>Name: </strong>{{ company.name }}</p>
-            <p><strong>Description: </strong>{{ company.description }}</p>
-            <p><strong>Staff Members: </strong>
-                {% for member in company.staffmember_set.all %}
-                <strong>{{ member.profile.user.username }} </strong>
-                {% endfor %}
-            </p>
-            <p><strong>Company Services: </strong>
-                {% for service in company.service_set.all %}
-                <strong>{{ service }} </strong>
-                {% endfor %}
-            </p>
-
-        </div>
-
-        {% if company %}
+    {% if company %}
         <div class="container">
             <div class="row justify-content-center">
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-primary"
-                            onclick="location.href='{% url 'staff-list' company_id=company.id %}'">
-                        View Staff Members
-                    </button>
-                    <button type="submit" class="btn btn-primary"
-                            onclick="location.href='{% url 'service-list' company_id=company.id %}'">
-                        View Services
-                    </button>
+                <div class="col-4">
+                    <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
+                         style="width: 18rem;"
+                         alt="...">
+                    <p><strong>Name: </strong>{{ company.name }}</p>
+                    <p><strong>Description: </strong>{{ company.description }}</p>
+                    <p><strong>Staff Members: </strong>
+                        {% for member in company.staffmember_set.all %}
+                            <strong>{{ member.profile.user.username }} </strong>
+                        {% endfor %}
+                    </p>
+                    <p><strong>Company Services: </strong>
+                        {% for service in company.service_set.all %}
+                            <strong>{{ service }} </strong>
+                        {% endfor %}
+                    </p>
 
-                    {% if show_edit_button %}
-                    <button onclick="location.href='{% url 'company-update'  company_id=company.id %}'"
-                            type="button"
-                            data-toggle="modal" data-target="#exampleModal"
-                            class="btn btn-primary">
-                        Edit
-                    </button>
-                    <button onclick="location.href='{% url 'company-order'  company_id=company.id %}'"
-                            type="button"
-                            data-toggle="modal" data-target="#exampleModal"
-                            class="btn btn-primary">
-                        Company Orders
-                    </button>
-                    {% include 'company/company/company_delete_button.html' with company_id=company.id %}
-                    {% endif %}
+                </div>
+
+                {% if company %}
+                    <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-primary"
+                                    onclick="location.href='{% url 'staff-list' company_id=company.id %}'">
+                                View Staff Members
+                            </button>
+                            <button type="submit" class="btn btn-primary"
+                                    onclick="location.href='{% url 'service-list' company_id=company.id %}'">
+                                View Services
+                            </button>
+
+                            {% if show_edit_button %}
+                                <button onclick="location.href='{% url 'company-update'  company_id=company.id %}'"
+                                        type="button"
+                                        class="btn btn-primary">
+                                    Edit
+                                </button>
+                                <button onclick="location.href='{% url 'company-order'  company_id=company.id %}'"
+                                        type="button"
+                                        class="btn btn-primary">
+                                    Company Orders
+                                </button>
+                                {% include 'company/company/company_delete_button.html' with company_id=company.id %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
                 </div>
             </div>
-            {% endif %}
         </div>
-    </div>
-</div>
-{% endif %}
+    {% endif %}
 {% endblock %}

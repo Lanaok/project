@@ -192,52 +192,30 @@ def view_service(request, service_id):
 
 
 def view_company_orders(request, company_id):
-    company = Company.objects.get(pk=company_id)
-    service_list = Service.objects.all().filter(company=company)
-    orderlist = []
-    for service in service_list:
-        for order in Order.objects.all().filter(service_order=service):
-            orderlist.append(order)
-
-    return render(request, 'company/company/company_orders.html', {'orders': orderlist,
-                                                                   'company_id': company_id})
+    return render(request, 'company/company/company_orders.html',
+                  {'orders': Order.objects.filter(service_order__company_id=company_id),
+                   'company_id': company_id, 'active_tab': 'all-tab'})
 
 
 def company_order_req(request, company_id):
-    company = Company.objects.get(pk=company_id)
-    service_list = Service.objects.all().filter(company=company)
-    orderlist = []
-    for service in service_list:
-        for order in Order.objects.all().filter(service_order=service):
-            orderlist.append(order)
-
-    return render(request, 'company/company/company_order_req.html', {'orders': orderlist,
-                                                                      'company_id': company_id})
+    return render(request, 'company/company/company_orders.html',
+                  {'orders': Order.objects.filter(service_order__company_id=company_id,
+                                                  order_state=Order.OrderState.requested),
+                   'company_id': company_id, 'active_tab': 'req-tab'})
 
 
 def company_order_rem(request, company_id):
-    company = Company.objects.get(pk=company_id)
-    service_list = Service.objects.all().filter(company=company)
-    orderlist = []
-    for service in service_list:
-        for order in Order.objects.all().filter(service_order=service):
-            orderlist.append(order)
-
-    return render(request, 'company/company/company_order_rem.html', {'orders': orderlist,
-                                                                      'company_id': company_id})
+    return render(request, 'company/company/company_orders.html',
+                  {'orders': Order.objects.filter(service_order__company_id=company_id,
+                                                  order_state=Order.OrderState.removed),
+                   'company_id': company_id, 'active_tab': 'rem-tab'})
 
 
 def company_order_app(request, company_id):
-    company = Company.objects.get(pk=company_id)
-    service_list = Service.objects.all().filter(company=company)
-    orderlist = []
-    for service in service_list:
-        for order in Order.objects.all().filter(service_order=service):
-            orderlist.append(order)
-
-    return render(request, 'company/company/company_order_app.html', {'orders': orderlist,
-                                                                      'company_id': company_id})
-
+    return render(request, 'company/company/company_orders.html',
+                  {'orders': Order.objects.filter(service_order__company_id=company_id,
+                                                  order_state=Order.OrderState.approved),
+                   'company_id': company_id, 'active_tab': 'app-tab'})
 
 def update_company_orders(request, company_id):
     user = request.user

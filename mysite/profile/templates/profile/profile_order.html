@@ -2,16 +2,16 @@
 {% block content %}
 <ul class="nav nav-tabs justify-content-center">
     <li class="nav-item">
-        <a class="nav-link active" href="{% url 'profile-orders' %}">All</a>
+        <a class="nav-link" id="all-tab" href="{% url 'profile-orders' %}">All</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'order_req' %}">Requested</a>
+        <a class="nav-link" id="req-tab" href="{% url 'order_req' %}">Requested</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'order_app' %}">Approved</a>
+        <a class="nav-link" id="app-tab" href="{% url 'order_app' %}">Approved</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'order_rem' %}">Removed</a>
+        <a class="nav-link" id="rem-tab" href="{% url 'order_rem' %}">Removed</a>
     </li>
 </ul>
 
@@ -19,8 +19,7 @@
 <div class="row justify-content-center">
         {% for order in profile_order_list %}
 
-
-        {% if order.order_state == "RE" %}
+        {% if order.order_state == order.OrderState.requested %}
         <div class="card text-white bg-info mb-3" style="width: 18rem;">
 
             <div class="card-body">
@@ -34,7 +33,7 @@
                 <a href="{{ order.get_absolute_url }}" class="btn btn-dark">Order details</a>
             </div>
         </div>
-        {% elif order.order_state == 'denied' or order.order_state == "REM" %}
+        {% elif order.order_state == order.OrderState.denied or order.order_state == order.OrderState.removed %}
         <div class="card text-white bg-danger mb-3" style="width: 18rem;">
 
             <div class="card-body">
@@ -55,7 +54,7 @@
 
             </div>
         </div>
-        {% elif order.order_state == 'approved' %}
+        {% elif order.order_state == order.OrderState.approved %}
         <div class="card text-white bg-success mb-3" style="width: 18rem;">
 
             <div class="card-body">
@@ -77,5 +76,7 @@
 
     </div>
 </div>
-
+<script>
+   $("#{{ active_tab }}").addClass("active")
+</script>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 
-from .forms import UserForm, ProfileForm
 from order.models import Order
+from .forms import UserForm, ProfileForm
 from .models import Profile
 
 
@@ -31,26 +31,28 @@ def update_profile(request):
 
 def order_requested(request):
     user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile)
+    order_list = Order.objects.filter(user_orders=user_profile, order_state=Order.OrderState.requested)
 
-    return render(request, 'profile/order_req.html', {'profile_order_list': order_list})
+    return render(request, 'profile/profile_order.html', {'profile_order_list': order_list, 'active_tab': 'req-tab'})
+
 
 def order_approved(request):
     user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile)
+    order_list = Order.objects.filter(user_orders=user_profile, order_state=Order.OrderState.approved)
 
-    return render(request, 'profile/order_app.html', {'profile_order_list': order_list})
+    return render(request, 'profile/profile_order.html', {'profile_order_list': order_list, 'active_tab': 'app-tab'})
+
 
 def order_removed(request):
     user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile)
+    order_list = Order.objects.filter(user_orders=user_profile, order_state=Order.OrderState.removed)
 
-    return render(request, 'profile/order_rem.html', {'profile_order_list': order_list})
+    return render(request, 'profile/profile_order.html', {'profile_order_list': order_list, 'active_tab': 'rem-tab'})
+
 
 def view_orders(request):
-    # user_profile = Profile.objects.get(pk=profile_id)
     user_profile = Profile.objects.get(user=request.user)
     order_list = Order.objects.filter(user_orders=user_profile)
     return render(request, 'profile/profile_order.html', {
-        'profile_order_list': order_list
+        'profile_order_list': order_list, 'active_tab': 'all-tab'
     })

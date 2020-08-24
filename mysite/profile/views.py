@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
+from django.views.generic import ListView
 
 from order.models import Order
 from .forms import UserForm, ProfileForm
-from .models import Profile
 
 
 def view_profile(request):
@@ -29,30 +29,20 @@ def update_profile(request):
     })
 
 
-def order_requested(request):
-    user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile, order_state=Order.OrderState.requested)
+class ProfileOrderList(ListView):
+    model = Order
+    template_name = "profile/profile_order.html"
+    paginate_by = 9
 
-    return render(request, 'profile/profile_order.html', {'profile_order_list': order_list, 'active_tab': 'req-tab'})
+    def get_queryset(self):
+        if self.kwargs['filter'] != 'all':
+            return Order.objects.filter(user_orders=self.request.user.profile,
+                                        order_state=self.kwargs['filter']).order_by('date_created')
+        else:
+            return Order.objects.filter(user_orders=self.request.user.profile).order_by('date_created')
 
-
-def order_approved(request):
-    user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile, order_state=Order.OrderState.approved)
-
-    return render(request, 'profile/profile_order.html', {'profile_order_list': order_list, 'active_tab': 'app-tab'})
-
-
-def order_removed(request):
-    user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile, order_state=Order.OrderState.removed)
-
-    return render(request, 'profile/profile_order.html', {'profile_order_list': order_list, 'active_tab': 'rem-tab'})
-
-
-def view_orders(request):
-    user_profile = Profile.objects.get(user=request.user)
-    order_list = Order.objects.filter(user_orders=user_profile)
-    return render(request, 'profile/profile_order.html', {
-        'profile_order_list': order_list, 'active_tab': 'all-tab'
-    })
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order_states'] = Order.OrderState
+        context['active_tab'] = self.kwargs['filter'] + "-tab"
+        return context

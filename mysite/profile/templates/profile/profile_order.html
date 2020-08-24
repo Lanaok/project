@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul class="nav nav-tabs justify-content-center">
-    <li class="nav-item">
-        <a class="nav-link" id="all-tab" href="{% url 'profile-orders' %}">All</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="req-tab" href="{% url 'order_req' %}">Requested</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="app-tab" href="{% url 'order_app' %}">Approved</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="rem-tab" href="{% url 'order_rem' %}">Removed</a>
-    </li>
-</ul>
+    <ul class="nav nav-tabs justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link" id="all-tab" href="{% url 'profile-orders' filter='all' %}">All</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="{{ order_states.requested }}-tab"
+               href="{% url 'profile-orders' filter=order_states.requested %}">Requested</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="{{ order_states.approved }}-tab"
+               href="{% url 'profile-orders' filter=order_states.approved %}">Approved</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="{{ order_states.removed }}-tab"
+               href="{% url 'profile-orders'  filter=order_states.removed %}">Removed</a>
+        </li>
+    </ul>
 
-{% include "order/order_list.html" with order_list=profile_order_list%}
+    {% include "order/order_list.html" with order_list=order_list %}
 
 {% endblock %}

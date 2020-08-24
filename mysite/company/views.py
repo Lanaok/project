@@ -194,7 +194,7 @@ def view_service(request, service_id):
 class CompanyOrderList(ListView):
     model = Order
     template_name = "company/company/company_orders.html"
-    paginate_by = 6
+    paginate_by = 9
 
     def get_queryset(self):
         if self.kwargs['filter'] != 'all':
@@ -223,7 +223,7 @@ def update_company_orders(request, company_id):
             order_obj.order_state = Order.OrderState.denied
             order_obj.save()
 
-    return redirect(reverse('company-order', args=(company_id, request.POST.get('active_tab').split('-tab')[0])))
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 class CompanyList(ListView):

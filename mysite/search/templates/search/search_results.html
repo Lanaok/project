@@ -4,9 +4,9 @@
         <h1>{{ title }}</h1>
     {% endif %}
     <div class="container">
-        <div class="row row-cols-3">
+        <div class="row">
             {% for object in object_list %}
-                <div class="col px-lg-5 py-3">
+                <div class="col-lg-4">
                     {% include "company/card.html" with object=object %}
                 </div>
             {% endfor %}

@@ -5,11 +5,8 @@ from . import views
 
 urlpatterns = [
     path('<int:company_id>/', views.view_company, name='company-detail'),
-    path('<int:company_id>/orders/', views.view_company_orders, name='company-order'),
-    path('<int:company_id>/orders/req/', views.company_order_req, name='company_order_req'),
-    path('<int:company_id>/orders/rem/', views.company_order_rem, name='company_order_rem'),
-    path('<int:company_id>/orders/app/', views.company_order_app, name='company_order_app'),
-    path('<int:company_id>/orders/update/', views.update_company_orders, name='update-order'),
+    path('<int:company_id>/orders/<str:filter>/', views.CompanyOrderList.as_view(), name='company-order'),
+    path('<int:company_id>/order/update/', views.update_company_orders, name='update-order'),
     path('<int:company_id>/edit/', views.edit_company, name='company-update'),
     path('<int:company_id>/remove/', views.remove_company, name='company-remove'),
     path('add/', views.edit_company, name='company-update'),
@@ -29,3 +26,4 @@ urlpatterns = [
     path('service/<int:service_id>/remove/', views.remove_service, name='service-remove'),
     path('<int:service_id>/order/', makeorder, name='make-order'),
 ]
+

@@ -191,34 +191,27 @@ def view_service(request, service_id):
                   {'service': Service.objects.get(pk=service_id)})
 
 
-def view_company_orders(request, company_id):
-    return render(request, 'company/company/company_orders.html',
-                  {'orders': Order.objects.filter(service_order__company_id=company_id),
-                   'company_id': company_id, 'active_tab': 'all-tab'})
+class CompanyOrderList(ListView):
+    model = Order
+    template_name = "company/company/company_orders.html"
+    paginate_by = 6
 
+    def get_queryset(self):
+        if self.kwargs['filter'] != 'all':
+            return Order.objects.filter(service_order__company_id=self.kwargs['company_id'],
+                                        order_state=self.kwargs['filter']).order_by('date_created')
+        else:
+            return Order.objects.filter(service_order__company_id=self.kwargs['company_id']).order_by('date_created')
 
-def company_order_req(request, company_id):
-    return render(request, 'company/company/company_orders.html',
-                  {'orders': Order.objects.filter(service_order__company_id=company_id,
-                                                  order_state=Order.OrderState.requested),
-                   'company_id': company_id, 'active_tab': 'req-tab'})
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order_states'] = Order.OrderState
+        context['company_id'] = self.kwargs['company_id']
+        context['active_tab'] = self.kwargs['filter'] + "-tab"
+        return context
 
-
-def company_order_rem(request, company_id):
-    return render(request, 'company/company/company_orders.html',
-                  {'orders': Order.objects.filter(service_order__company_id=company_id,
-                                                  order_state=Order.OrderState.removed),
-                   'company_id': company_id, 'active_tab': 'rem-tab'})
-
-
-def company_order_app(request, company_id):
-    return render(request, 'company/company/company_orders.html',
-                  {'orders': Order.objects.filter(service_order__company_id=company_id,
-                                                  order_state=Order.OrderState.approved),
-                   'company_id': company_id, 'active_tab': 'app-tab'})
 
 def update_company_orders(request, company_id):
-    user = request.user
     if request.method == 'POST':
         order_id = request.POST.get('order_id')
         order_obj = Order.objects.get(pk=order_id)
@@ -230,7 +223,7 @@ def update_company_orders(request, company_id):
             order_obj.order_state = Order.OrderState.denied
             order_obj.save()
 
-    return redirect(reverse('company-order', args=(company_id,)))
+    return redirect(reverse('company-order', args=(company_id, request.POST.get('active_tab').split('-tab')[0])))
 
 
 class CompanyList(ListView):

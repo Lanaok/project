@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 text-center">
-                                    <button type="submit" class="btn dento-btn">Booking Now</button>
+                                    <button type="submit" class="btn btn-primary">Book Now</button>
                                 </div>
                             </div>
                         </form>
@@ -164,6 +164,7 @@
                     dataType: 'json',
                     success: function (data) {
                         result = data['result']
+                        console.log(result)
                         drawTopRow(working_hour_from, working_hour_to)
                         for (let i = 0; i < result.length; i++) {
                             splitTime = result[i]['from'].split(':')

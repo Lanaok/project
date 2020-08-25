@@ -9,6 +9,7 @@ from company.forms import CompanyForm
 from company.forms import ServiceForm
 from company.models import Company, StaffMember
 from company.models import Service
+from notification.models import create_notification
 from order.models import Order
 from profile import models
 from profile.models import Manager, Profile
@@ -199,9 +200,9 @@ class CompanyOrderList(ListView):
     def get_queryset(self):
         if self.kwargs['filter'] != 'all':
             return Order.objects.filter(service_order__company_id=self.kwargs['company_id'],
-                                        order_state=self.kwargs['filter']).order_by('date_created')
+                                        order_state=self.kwargs['filter']).order_by('-date_created')
         else:
-            return Order.objects.filter(service_order__company_id=self.kwargs['company_id']).order_by('date_created')
+            return Order.objects.filter(service_order__company_id=self.kwargs['company_id']).order_by('-date_created')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -219,9 +220,15 @@ def update_company_orders(request, company_id):
         if 'but1' in request.POST:
             order_obj.order_state = Order.OrderState.approved
             order_obj.save()
+            create_notification("Order approved", order_obj.get_message, order_obj.staff_order.company.manager.profile,
+                                order_obj.user_orders,
+                                reverse('profile-orders', args=('all',)))
         elif 'but2' in request.POST:
             order_obj.order_state = Order.OrderState.denied
             order_obj.save()
+            create_notification("Order denied", order_obj.get_message, order_obj.staff_order.company.manager.profile,
+                                order_obj.user_orders,
+                                reverse('profile-orders', args=('all',)))
 
     return redirect(request.META.get('HTTP_REFERER'))
 

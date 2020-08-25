@@ -11,7 +11,7 @@ class NotificationList(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        return Notification.objects.order_by('date_created')
+        return Notification.objects.filter(receiver=self.request.user.profile).order_by('-date_created')
 
 
 def mark_all_as_read(request):

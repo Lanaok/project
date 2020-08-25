@@ -29,3 +29,9 @@ class Order(models.Model):
 
     def get_absolute_url(self):
         return reverse('order-view', args=[str(self.id)])
+
+    @property
+    def get_message(self):
+        return ' service- ' + str(
+            self.service_order.name) + ' on ' + str(self.order_day) + ' at ' + str(
+            self.order_time) + ' with staff ' + str(self.staff_order)

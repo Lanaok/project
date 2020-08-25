@@ -1,7 +1,8 @@
 from django.db import models
-
 # Create your models here.
 from django.utils import timezone
+
+from profile.models import Profile
 
 
 class Notification(models.Model):
@@ -9,7 +10,9 @@ class Notification(models.Model):
     description = models.CharField(max_length=400)
     read = models.BooleanField(default=False, blank=False, null=False)
     date_created = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    sender = models.ForeignKey(Profile, null=False, blank=False, on_delete=models.CASCADE, related_name="sender")
+    receiver = models.ForeignKey(Profile, null=False, blank=False, on_delete=models.CASCADE, related_name="receiver")
+    link = models.CharField(max_length=200, blank=False, null=False)
 
     @property
     def time_elapsed(self):
@@ -22,3 +25,8 @@ class Notification(models.Model):
             return str(int(time_diff / (60 * 60))) + 'h'
         else:
             return self.date_created.date()
+
+
+def create_notification(title: str, description: str, sender: Profile, receiver: Profile, link: str):
+    notification = Notification(title=title, description=description, sender=sender, receiver=receiver, link=link)
+    notification.save()

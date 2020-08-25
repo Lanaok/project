@@ -37,9 +37,9 @@ class ProfileOrderList(ListView):
     def get_queryset(self):
         if self.kwargs['filter'] != 'all':
             return Order.objects.filter(user_orders=self.request.user.profile,
-                                        order_state=self.kwargs['filter']).order_by('date_created')
+                                        order_state=self.kwargs['filter']).order_by('-date_created')
         else:
-            return Order.objects.filter(user_orders=self.request.user.profile).order_by('date_created')
+            return Order.objects.filter(user_orders=self.request.user.profile).order_by('-date_created')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -4,11 +4,13 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render
-
 # Create your views here.
+from django.urls import reverse
+
 from company.models import Service
 from company.models import StaffMember
 # Create your views here.
+from notification.models import create_notification
 from profile.models import Manager
 from profile.models import Profile
 from .forms import OrderForm
@@ -44,7 +46,8 @@ def makeorder(request, service_id):
         order_instance.order_day = day
         order_instance.order_time = time
         order_instance.save()
-
+        create_notification("Order requested", order_instance.get_message, request.user.profile,
+                            staff_profile.staffmember.company.manager.profile, reverse('company-order', args=(company.id, "all")))
         return render(request, 'order/appointment.html')
 
     return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_time': order_form,
@@ -66,6 +69,9 @@ def order_remove(request, order_id):
     user_order = Order.objects.get(pk=order_id)
     user_order.order_state = Order.OrderState.removed
     user_order.save()
+    create_notification("Order removed", user_order.get_message, user_order.user_orders,
+                        user_order.staff_order.company.manager.profile,
+                        reverse('company-order', args=(user_order.staff_order.company.id, 'all')))
     return render(request, 'order/order_remove.html', )
 
 

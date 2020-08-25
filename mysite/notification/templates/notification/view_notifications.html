@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container-fluid col-6">
-        <div class="row mb-lg-2 mt-lg-2 justify-content-end">
+        <div class="row mb-2 mt-2 justify-content-end">
             <a href="{% url 'mark-all-as-read' %}" class="btn btn-primary"> Mark all as read</a>
         </div>
-        <div class="row">
-            <div class="list-group">
+        <div class="row justify-content-center">
+            <div class="list-group col-lg-8">
                 {% for notification in notification_list %}
                     {% include 'notification/notification_card.html' with notification=notification %}
                 {% endfor %}

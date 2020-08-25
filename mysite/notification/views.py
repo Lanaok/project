@@ -17,3 +17,10 @@ class NotificationList(ListView):
 def mark_all_as_read(request):
     Notification.objects.filter(read=False).update(read=True)
     return redirect('notifications-view')
+
+
+def mark_as_read(request, notification_id):
+    notification = Notification.objects.get(pk=notification_id)
+    notification.read = True
+    notification.save()
+    return redirect(notification.link)

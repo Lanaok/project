@@ -5,6 +5,7 @@ from django.forms import TextInput, Textarea, Select, NumberInput, TimeInput, Fi
 
 from company.models import Company
 from company.models import Service
+from company.models import Comment
 
 
 class CompanyForm(forms.ModelForm):
@@ -43,3 +44,9 @@ class ServiceForm(forms.ModelForm):
             'duration': TimeInput(attrs={'class': 'form-control'}),
             'image': FileInput(attrs={'class': 'form-control'}),
         }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['subject', 'comment', 'rate']

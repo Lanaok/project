@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container-fluid col-6">
+    <div class="row mb-2 mt-2 justify-content-end">
+        <strong>User reviews </strong>
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="list-group col-lg-8">
+            {% for rev in comments_list %}
+            {% include 'company/company/review_card.html' with review=rev %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

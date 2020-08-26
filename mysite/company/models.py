@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.db import models
 # Create your models here.
+from django.db.models import Avg
 from django.urls import reverse
 
 from profile.models import Profile, Manager
@@ -33,6 +34,13 @@ class Company(models.Model):
 
     def get_absolute_url(self):
         return reverse('company-detail', args=[str(self.id)])
+
+    def average_review(self):
+        reviews = Comment.objects.filter(company=self).aggregate(avarage=Avg('rate'))
+        avg = 0
+        if reviews["avarage"] is not None:
+            avg = float(reviews["avarage"])
+        return avg
 
 
 class Products(models.Model):
@@ -71,3 +79,25 @@ class StaffMember(models.Model):
 
     def get_absolute_url(self):
         return reverse('staff-view', args=[str(self.id)])
+
+
+class Comment(models.Model):
+    STATUS = (
+        ('New', 'New'),
+        ('True', 'True'),
+        ('False', 'False'),
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=50, blank=True)
+    comment = models.CharField(max_length=100, blank=True)
+    rate = models.IntegerField(default=1)
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS, default='New')
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.subject
+
+

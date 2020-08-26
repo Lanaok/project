@@ -5,14 +5,15 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView
 
-from company.forms import CompanyForm
+from company.forms import CompanyForm, CommentForm
 from company.forms import ServiceForm
-from company.models import Company, StaffMember
+from company.models import Company, StaffMember, Comment
 from company.models import Service
 from notification.models import create_notification
 from order.models import Order
 from profile import models
 from profile.models import Manager, Profile
+from django.http import HttpResponse
 
 
 def edit_company(request, company_id=None):
@@ -245,3 +246,22 @@ class CompanyList(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'All Companies'
         return context
+
+
+def add_comment(request, company_id):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':  # check post
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            data = Comment()  # create relation with model
+            data.subject = form.cleaned_data['subject']
+            data.comment = form.cleaned_data['comment']
+            data.rate = form.cleaned_data['rate']
+            data.company_id = company_id
+            current_user = request.user
+            data.user_id = current_user.id
+            data.save()  # save data to table
+
+
+    comments_list = Comment.objects.all().filter(company=Company.objects.get(pk=company_id))
+    return render(request, "company/company/review_message.html", {'comments_list': comments_list})

@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if service_form.name %}
-        {% include "company/formtemplates/post_form_template.html" with form=service_form button_name="Save" %}
-    {% else %}
-        {% include "company/formtemplates/post_form_template.html" with form=service_form button_name="Add" %}
-    {% endif %}
-
+    <div class="container mt-sm-4">
+        {% if service_form.name %}
+            {% include "company/formtemplates/post_form_template.html" with form=service_form button_name="Save" %}
+        {% else %}
+            {% include "company/formtemplates/post_form_template.html" with form=service_form button_name="Add" %}
+        {% endif %}
+    </div>
 {% endblock %}

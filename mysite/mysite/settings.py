@@ -72,7 +72,8 @@ TEMPLATES = [
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
                  os.path.join(BASE_DIR, 'profile', 'templates'),
                  os.path.join(BASE_DIR, 'company', 'templates'),
-                 os.path.join(BASE_DIR, 'order', 'templates'), ],
+                 os.path.join(BASE_DIR, 'order', 'templates'),
+                 os.path.join(BASE_DIR, 'templates', 'allauth')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,3 +155,7 @@ LOGIN_REDIRECT_URL = 'company-list'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'company-list'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+ACCOUNT_FORMS = {
+    'signup': 'mysite.forms.MyCustomSignupForm'
+}

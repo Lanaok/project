@@ -62,11 +62,12 @@ def remove_company(request, company_id):
 
 
 def view_my_companies(request):
-    company_manager = request.user.profile.manager
-    if company_manager:
+    if Manager.objects.filter(profile=request.user.profile).exists():
+        company_manager = request.user.profile.manager
         return render(request, 'company/company/company_list.html',
                       {'company_list': Company.objects.all().filter(manager=company_manager),
                        'paginate': False, 'title': 'My Companies'})
+    return render(request, 'company/company/company_list.html')
 
 
 def staff_has_service(staff_instance, service_id):

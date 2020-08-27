@@ -80,9 +80,14 @@ def get_staff_schedule(request):
         staff = StaffMember.objects.get(pk=request.GET['staff_id'])
         date = datetime.datetime.strptime(request.GET['date'], '%Y-%m-%d')
 
-        orders = list(Order.objects.filter(staff_order=staff, order_day=date, order_state=Order.OrderState.approved))
-        time_intervals = []
+        orders = list(Order.objects.filter(staff_order=staff, order_day=date))
+        approved_intervals = []
+        pending_intervals = []
         for order in orders:
-            time_intervals.append({'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
-        return JsonResponse({'result': time_intervals})
+            if order.order_state == Order.OrderState.approved:
+                approved_intervals.append({'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
+            elif order.order_state == Order.OrderState.requested:
+                pending_intervals.append({'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
+
+        return JsonResponse({'approved_intervals': approved_intervals, 'pending_intervals': pending_intervals})
     return None

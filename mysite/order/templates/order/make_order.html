@@ -1,41 +1,36 @@
 {% extends 'base.html' %}
 
+{% block head_title %} Make An Appointment {% endblock %}
 {% block content %}
-
-
     <!-- Book An Oppointment Area Start -->
     <section class="book-an-oppointment-area section-padding-100 bg-img bg-gradient-overlay jarallax clearfix">
 
         <div class="container">
             <div class="row">
                 <!-- Section Heading -->
-                <div class="col-12">
+                <div class="col-12 mt-2">
                     <div class="section-heading text-center white">
                         <h2>Book An Appointment</h2>
                         <div class="line"></div>
                     </div>
                 </div>
             </div>
-
             <div class="row">
-                <div class="col-12">
+                <div class="col-1">
+
+                </div>
+                <div class="col-6 mt-5">
                     <!-- Appointment Form -->
                     <div class="appointment-form">
                         <form action="#" method="post">
                             {% csrf_token %}
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-30">
-
-                                        <p><strong> user name:</strong> {{ username }} </p>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-12">
                                     <div class="form-group mb-25">
                                         <div class="form-group">
-                                            <label for="staffCombo">choose your staff member</label>
-                                            <select name="your-staff" class="form-control"
+                                            <label for="staffCombo">Choose your staff member</label>
+                                            <select name="your-staff" class="form-control custom-select"
                                                     id="staffCombo">
                                                 {% for s in staff %}
                                                     <option data-id="{{ s.id }}">{{ s }}</option>
@@ -62,53 +57,85 @@
                                 <div class="col-12 text-center">
                                     <button type="submit" class="btn btn-primary">Book Now</button>
                                 </div>
+
                             </div>
                         </form>
                     </div>
                 </div>
+                <div class="col-auto mt-5">
+                    <div class="row justify-content-center">
+                        <h3>Schedule</h3>
+                    </div>
+                    <h3 class="card-header" id="monthAndYear">Monday, Aug 17</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="calendar">
+                            <td style="width: 100%;">
+
+                            </td>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-2 mt-5 pt-5">
+                    <label>
+                        <svg width="20" height="20">
+                            <rect width="20" height="20" style="fill:#999;stroke-width:0;stroke:rgb(0,0,0)"/>
+                        </svg>
+                        Booked
+                    </label>
+                    <label>
+                        <svg width="20" height="20">
+                            <rect width="20" height="20" style="fill:#efe3af;stroke-width:0;stroke:rgb(0,0,0)"/>
+                        </svg>
+                        Pending
+                    </label>
+                </div>
             </div>
+        </div>
         </div>
     </section>
 
 
     <!-- Book An Oppointment Area End -->
 
-    <div class="container mt-5">
-        <h3 class="card-header" id="monthAndYear">Monday, Aug 17</h3>
-        <div style="overflow:auto;">
-            <table class="table table-bordered table-responsive" id="calendar">
-                <thead>
-                <tr id="calendar-head-row" class="btn-group">
-                </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
-
     {% block javascript %}
         <script>
             function drawTopRow(from, to) {
-                calTopRow = document.getElementById("calendar-head-row")
-                calTopRow.innerHTML = ""
-                for (let i = from; i < to; i++) {
-                    col = document.createElement("th")
-                    colText = document.createTextNode(i + ":00")
+                calendarTopRow = document.getElementById("calendar")
+                calendarTopRow.innerHTML = ""
+                for (let i = from; i <= to; i++) {
+                    row = document.createElement("tr")
+                    col = document.createElement("td")
+                    colText = document.createElement("b")
+                    colText.innerText = (i + ":00")
+                    div = document.createElement("div")
+                    div.setAttribute("style", "text-align: center; ")
                     col.id = `time_cell_${i}`
-                    col.appendChild(colText)
-                    calTopRow.appendChild(col)
+
+                    div.appendChild(colText)
+                    col.appendChild(div)
+                    row.appendChild(col)
+                    calendarTopRow.appendChild(row)
                 }
             }
 
-            function getGradient(percent) {
-                return `background:  linear-gradient(to right, #efe3af ${percent}%,#ffffff ${percent}%)`
+            function getApprovedGradient(percent) {
+                return `background:  linear-gradient(to bottom, #999 ${percent}%,#ffffff ${percent}%)`
             }
 
-            function getGradientToLeft(percent) {
-                return `background:  linear-gradient(to left, #efe3af ${percent}%,#ffffff ${percent}%)`
+            function getApprovedGradientToLeft(percent) {
+                return `background:  linear-gradient(to top, #999 ${percent}%,#ffffff ${percent}%)`
+            }
+
+            function getPendingGradient(percent) {
+                return `background:  linear-gradient(to bottom, #efe3af ${percent}%,#ffffff ${percent}%)`
+            }
+
+            function getPendingGradientToLeft(percent) {
+                return `background:  linear-gradient(to top, #efe3af ${percent}%,#ffffff ${percent}%)`
             }
 
             // from, to is in hours double value
-            function setColorOfCell(from, to) {
+            function setColorOfCell(from, to, getGradient, getGradientToLeft) {
                 from_min = from * 60
                 to_min = to * 60
                 cell_count = to - from
@@ -135,8 +162,8 @@
                 document.getElementById("monthAndYear").innerText = title
             }
 
-            var working_hour_from = parseInt("{{ working_hour_from }}".split())
-            var working_hour_to = parseInt("{{ working_hour_to }}".split())
+            var working_hour_from = parseInt("{{ working_hour_from }}".split()[0])
+            var working_hour_to = parseInt("{{ working_hour_to }}".split()[0])
             if ("{{ working_hour_from }}".includes("p.m.")) {
                 working_hour_from += 12
             }
@@ -163,19 +190,24 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        result = data['result']
-                        console.log(result)
+                        approvedIntervals = data['approved_intervals']
+                        pendingIntervals = data['pending_intervals']
                         drawTopRow(working_hour_from, working_hour_to)
-                        for (let i = 0; i < result.length; i++) {
-                            splitTime = result[i]['from'].split(':')
-                            from = parseInt(splitTime[0]) + parseFloat(splitTime[1] / 60)
-                            console.log(from)
-                            to = from + parseInt(result[i]['duration'])
-                            console.log(from + ' ' + to)
-                            setColorOfCell(from, to)
-                        }
+                        colorRows(approvedIntervals, getApprovedGradient, getApprovedGradientToLeft)
+                        colorRows(pendingIntervals, getPendingGradient, getPendingGradientToLeft)
                     }
                 });
+            }
+
+            function colorRows(result, gradientFun, gradientFunLeft) {
+                for (let i = 0; i < result.length; i++) {
+                    splitTime = result[i]['from'].split(':')
+                    from = parseInt(splitTime[0]) + parseFloat(splitTime[1] / 60)
+                    console.log(from)
+                    to = from + parseInt(result[i]['duration'])
+                    console.log(from + ' ' + to)
+                    setColorOfCell(from, to, gradientFun, gradientFunLeft)
+                }
             }
 
 

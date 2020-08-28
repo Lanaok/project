@@ -64,7 +64,7 @@
                         <i class="fa fa-star{% if company.average_review < 3%}-o empty{% endif%}"></i>
                         <i class="fa fa-star{% if company.average_review < 4%}-o empty{% endif%}"></i>
                         <i class="fa fa-star{% if company.average_review < 5%}-o empty{% endif%}"></i>
-                        {{ company.average_review |stringformat:".2f"}}
+                        {{ company.average_review |stringformat:".i"}}
                     </div>
                 </div>
             </div>

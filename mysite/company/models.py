@@ -39,7 +39,7 @@ class Company(models.Model):
         reviews = Comment.objects.filter(company=self).aggregate(avarage=Avg('rate'))
         avg = 0
         if reviews["avarage"] is not None:
-            avg = float(reviews["avarage"])
+            avg = int(reviews["avarage"])
         return avg
 
 

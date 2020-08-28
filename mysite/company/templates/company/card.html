@@ -11,6 +11,18 @@
     </a>
     <div class="card-body">
         <h5 class="card-title"><a href="{{ object.get_absolute_url }}"> {{ object.name }}</a></h5>
+         <div class="container">
+                <div class="row justify-content-end">
+                    <div class="object-rating">
+                        <i class="fa fa-star{% if object.average_review < 1%}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if object.average_review < 2%}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if object.average_review < 3%}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if object.average_review < 4%}-o empty{% endif%}"></i>
+                        <i class="fa fa-star{% if object.average_review < 5%}-o empty{% endif%}"></i>
+                        {{ object.average_review |stringformat:".i"}}
+                    </div>
+                </div>
+            </div>
         <p class="card-text">{{ object.description }}</p>
 
     </div>

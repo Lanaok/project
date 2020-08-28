@@ -2,19 +2,30 @@
 {% block content %}
 <div class="row-cols-2 col-sm-auto mb-2">
     <br class="col">
-        <br> <a href="{{ order.get_absolute_url }}"> {{ order }}</a></br>
-        <br><li class="list-group-item list-group-item-primary">Message : {{ order.order_message }}</li></br>
+    <br> <a href="{{ order.get_absolute_url }}"> {{ order }}</a></br>
+    <br>
+    <li class="list-group-item list-group-item-primary">Message : {{ order.order_message }}</li>
+    </br>
+    <strong>Order Details</strong>
+    <br>
+    <li class="list-group-item list-group-item-info"><h5>{{ order.service_order.name }}</h5>
+                            {{ order.service_order.description }} with staff member
+                                {{ order.staff_order }}
+                                at
+                                {{ order.order_time }}
+                                on
+                                {{ order.order_day }}</li>
+    </br>
+</div>
 
-    </div>
-
-    {% if not userIsManager %}
-    <div class="col">
-        <button type="button" class="btn btn-danger"
-                onclick="location.href='{% url 'order_remove' order_id=order.id %}'"
-                name="hi">
-            Remove
-        </button>
-    </div>
-    {% endif %}
+{% if not userIsManager %}
+<div class="col">
+    <button type="button" class="btn btn-danger"
+            onclick="location.href='{% url 'order_remove' order_id=order.id %}'"
+            name="hi">
+        Remove
+    </button>
+</div>
+{% endif %}
 </div>
 {% endblock %}

@@ -1,7 +1,8 @@
-import datetime
+from datetime import datetime
 
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.forms.utils import ErrorList
 from django.http import JsonResponse
 from django.shortcuts import render
 # Create your views here.
@@ -27,30 +28,42 @@ def makeorder(request, service_id):
     order_instance = Order()
     order_form = OrderForm(instance=order_instance)
     if request.method == 'POST':
+        order_form = OrderForm(request.POST)
         staff_member = request.POST['your-staff']
         time = request.POST['order_time']
         day = request.POST['order_day']
         message = request.POST['your-message']
-        email_from = request.user.email  # ?
-        manager = Manager.objects.get(company=company)
-        message_for_send = message + ' service- ' + str(
-            service_requested.name) + ' on ' + str(day) + ' at ' + str(time) + ' with staff ' + str(staff_member)
-        manager_email = manager.profile.user.email
-        send_mail(name, message_for_send, email_from, list(manager_email))
-        order_instance.service_order = service_requested
+
         user = User.objects.get(username=staff_member)
         staff_profile = Profile.objects.get(user=user)
-        order_instance.staff_order = StaffMember.objects.get(profile=staff_profile)
-        order_instance.user_orders = Profile.objects.get(user=request.user)
-        order_instance.order_state = Order.OrderState.requested
-        order_instance.order_day = day
-        order_instance.order_time = time
-        order_instance.save()
-        create_notification("Order requested", order_instance.get_message, request.user.profile,
-                            staff_profile.staffmember.company.manager.profile, reverse('company-order', args=(company.id, "all")))
-        return render(request, 'order/appointment.html')
+        orders = list(Order.objects.filter(staff_order=staff_profile.staffmember, order_day=day))
+        if datetime.combine(datetime.strptime(day, '%Y-%m-%d').date(),
+                            datetime.strptime(time, '%H:%M').time()) < datetime.today():
+            errors = order_form.errors.setdefault('order_day', ErrorList())
+            errors.append('date cannot be in past')
+        elif not requested_hour_is_valid(orders, time):
+            errors = order_form.errors.setdefault('order_time', ErrorList())
+            errors.append('chosen time is booked')
+        else:
+            email_from = request.user.email  # ?
+            manager = Manager.objects.get(company=company)
+            message_for_send = message + ' service- ' + str(
+                service_requested.name) + ' on ' + str(day) + ' at ' + str(time) + ' with staff ' + str(staff_member)
+            manager_email = manager.profile.user.email
+            send_mail(name, message_for_send, email_from, list(manager_email))
+            order_instance.service_order = service_requested
+            order_instance.staff_order = StaffMember.objects.get(profile=staff_profile)
+            order_instance.user_orders = Profile.objects.get(user=request.user)
+            order_instance.order_state = Order.OrderState.requested
+            order_instance.order_day = day
+            order_instance.order_time = time
+            order_instance.save()
+            create_notification("Order requested", order_instance.get_message, request.user.profile,
+                                staff_profile.staffmember.company.manager.profile,
+                                reverse('company-order', args=(company.id, "all")))
+            return render(request, 'order/appointment.html')
 
-    return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_time': order_form,
+    return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_form': order_form,
                                                      'working_hour_from': company.working_hour_from,
                                                      'working_hour_to': company.working_hour_to})
 
@@ -78,16 +91,30 @@ def order_remove(request, order_id):
 def get_staff_schedule(request):
     if request.GET:
         staff = StaffMember.objects.get(pk=request.GET['staff_id'])
-        date = datetime.datetime.strptime(request.GET['date'], '%Y-%m-%d')
+        date = datetime.strptime(request.GET['date'], '%Y-%m-%d')
 
         orders = list(Order.objects.filter(staff_order=staff, order_day=date))
         approved_intervals = []
         pending_intervals = []
         for order in orders:
             if order.order_state == Order.OrderState.approved:
-                approved_intervals.append({'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
+                approved_intervals.append(
+                    {'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
             elif order.order_state == Order.OrderState.requested:
-                pending_intervals.append({'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
+                pending_intervals.append(
+                    {'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
 
         return JsonResponse({'approved_intervals': approved_intervals, 'pending_intervals': pending_intervals})
     return None
+
+
+def requested_hour_is_valid(orders, time):
+    today = datetime.today()
+    time = datetime.combine(today, datetime.strptime(time, '%H:%M').time())
+    for order in orders:
+        time_with_delta = time + order.service_order.duration
+        order_time = datetime.combine(today, order.order_time)
+        order_time_with_delta = order_time + order.service_order.duration
+        if order_time <= time < order_time_with_delta or order_time <= time_with_delta < order_time_with_delta:
+            return False
+    return True

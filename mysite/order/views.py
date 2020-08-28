@@ -57,6 +57,7 @@ def makeorder(request, service_id):
             order_instance.order_state = Order.OrderState.requested
             order_instance.order_day = day
             order_instance.order_time = time
+            order_instance.order_message = message
             order_instance.save()
             create_notification("Order requested", order_instance.get_message, request.user.profile,
                                 staff_profile.staffmember.company.manager.profile,
@@ -69,8 +70,11 @@ def makeorder(request, service_id):
 
 
 def order_view(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    service = order.service_order
+    company = service.company
     return render(request, 'order/order_detail.html',
-                  {'order': Order.objects.get(pk=order_id)})
+                  {'order': order, 'userIsManager': company.manager.profile == request.user.profile})
 
 
 def order_change(request, order_id):

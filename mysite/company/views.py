@@ -199,6 +199,7 @@ class CompanyOrderList(ListView):
     template_name = "company/company/company_orders.html"
     paginate_by = 9
 
+
     def get_queryset(self):
         if self.kwargs['filter'] != 'all':
             return Order.objects.filter(service_order__company_id=self.kwargs['company_id'],
@@ -262,7 +263,6 @@ def add_comment(request, company_id):
             current_user = request.user
             data.user_id = current_user.id
             data.save()  # save data to table
-
 
     comments_list = Comment.objects.all().filter(company=Company.objects.get(pk=company_id))
     return render(request, "company/company/review_message.html", {'comments_list': comments_list})

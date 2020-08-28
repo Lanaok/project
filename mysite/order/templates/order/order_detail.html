@@ -1,22 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="row col-sm-auto mb-2">
-        <div class="col">
-            <a href="{{ order.get_absolute_url }}"> {{ order }}</a>
-        </div>
-        <div class="col">
-            <button type="button" class="btn btn-primary"
-                    onclick="location.href='{% url 'order_change' order_id=order.id %}'">
-                Exchange order
-            </button>
-        </div>
-        <div class="col">
-            <button type="button" class="btn btn-danger"
-                    onclick="location.href='{% url 'order_remove' order_id=order.id %}'"
-                    name="hi">
-                Remove
-            </button>
-        </div>
+<div class="row-cols-2 col-sm-auto mb-2">
+    <br class="col">
+        <br> <a href="{{ order.get_absolute_url }}"> {{ order }}</a></br>
+        <br><li class="list-group-item list-group-item-primary">Message : {{ order.order_message }}</li></br>
 
     </div>
+
+    {% if not userIsManager %}
+    <div class="col">
+        <button type="button" class="btn btn-danger"
+                onclick="location.href='{% url 'order_remove' order_id=order.id %}'"
+                name="hi">
+            Remove
+        </button>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

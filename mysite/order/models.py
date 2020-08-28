@@ -20,9 +20,10 @@ class Order(models.Model):
     service_order = models.ForeignKey(Service, null=True, on_delete=models.SET_NULL)
     staff_order = models.ForeignKey(StaffMember, null=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
-    order_time = models.TimeField(default=timezone.now,null=False, blank=False)
-    order_day = models.DateField(default=timezone.now,null=False, blank=False)
+    order_time = models.TimeField(default=timezone.now, null=False, blank=False)
+    order_day = models.DateField(default=timezone.now, null=False, blank=False)
     order_state = models.CharField(choices=OrderState.choices, max_length=10)
+    order_message = models.CharField(max_length=300)
 
     def __str__(self):
         return self.service_order.name

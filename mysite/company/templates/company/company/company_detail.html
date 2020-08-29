@@ -1,110 +1,115 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% load static %}
-{% load i18n %}
-{% if company %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
-                 style="width: 18rem;"
-                 alt="...">
-            <p><strong>Name: </strong>{{ company.name }}</p>
-            <p><strong>Description: </strong>{{ company.description }}</p>
-            <p><strong>Staff Members: </strong>
-                {% for member in company.staffmember_set.all %}
-                <strong>{{ member.profile.user.username }} </strong>
-                {% endfor %}
-            </p>
-            <p><strong>Company Services: </strong>
-                {% for service in company.service_set.all %}
-                <strong>{{ service }} </strong>
-                {% endfor %}
-            </p>
-        </div>
-        {% if company %}
+    {% load static %}
+    {% load i18n %}
+    {% if company %}
         <div class="container">
             <div class="row justify-content-center">
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-primary"
-                            onclick="location.href='{% url 'staff-list' company_id=company.id %}'">
-                        View Staff Members
-                    </button>
-                    <button type="submit" class="btn btn-primary"
-                            onclick="location.href='{% url 'service-list' company_id=company.id %}'">
-                        View Services
-                    </button>
-                    <button type="submit" class="btn btn-primary"
-                            onclick="location.href='{% url 'add_comment' company_id=company.id %}'">
-                        View Company reviews
-                    </button>
-
-                    {% if show_edit_button %}
-                    <button onclick="location.href='{% url 'company-update'  company_id=company.id %}'"
-                            type="button"
-                            class="btn btn-primary">
-                        Edit
-                    </button>
-                    <button onclick="location.href='{% url 'company-order'  company_id=company.id filter='all' %}'"
-                    type="button"
-                    class="btn btn-primary">
-                    Company Orders
-                    </button>
-                    {% include 'company/company/company_delete_button.html' with company_id=company.id %}
-                    {% endif %}
-
-                </div>
-            </div>
-            <div class="container">
-                <div class="row justify-content-end">
-                    <div class="company-rating">
-                        <i class="fa fa-star{% if company.average_review < 1%}-o empty{% endif%}"></i>
-                        <i class="fa fa-star{% if company.average_review < 2%}-o empty{% endif%}"></i>
-                        <i class="fa fa-star{% if company.average_review < 3%}-o empty{% endif%}"></i>
-                        <i class="fa fa-star{% if company.average_review < 4%}-o empty{% endif%}"></i>
-                        <i class="fa fa-star{% if company.average_review < 5%}-o empty{% endif%}"></i>
-                        {{ company.average_review |stringformat:".i"}}
-                    </div>
-                </div>
-            </div>
-
-            {% if not show_edit_button %}
-            <div class="container">
-                <div class="row justify-content-end">
-                    <h><strong>write your review</strong></h>
-                    <form class="review-form" action="{% url 'add_comment' company_id=company.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input name="subject" class="input" type="text" placeholder="Your subject"/>
+                <div class="col-4">
+                    {% if company %}
+                        {% if company.image %}
+                            <img src="{{ company.image.url }}"
+                                 class="card-img-top" alt="...">
+                        {% else %}
+                            <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
+                                 class="card-img-top" alt="...">
+                        {% endif %}
+                        <p><strong>Name: </strong>{{ company.name }}</p>
+                        <p><strong>Description: </strong>{{ company.description }}</p>
+                        <p><strong>Staff Members: </strong>
+                            {% for member in company.staffmember_set.all %}
+                                <strong>{{ member.profile.user.username }} </strong>
+                            {% endfor %}
+                        </p>
+                        <p><strong>Company Services: </strong>
+                            {% for service in company.service_set.all %}
+                                <strong>{{ service }} </strong>
+                            {% endfor %}
+                        </p>
                         </div>
-                        <div class="form-group">
-                            <textarea name="comment" class="input" placeholder="Your review"></textarea>
+                        <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="btn-group" role="group">
+                                <button type="submit" class="btn btn-primary"
+                                        onclick="location.href='{% url 'staff-list' company_id=company.id %}'">
+                                    View Staff Members
+                                </button>
+                                <button type="submit" class="btn btn-primary"
+                                        onclick="location.href='{% url 'service-list' company_id=company.id %}'">
+                                    View Services
+                                </button>
+                                <button type="submit" class="btn btn-primary"
+                                        onclick="location.href='{% url 'add_comment' company_id=company.id %}'">
+                                    View Company reviews
+                                </button>
+
+                                {% if show_edit_button %}
+                                    <button onclick="location.href='{% url 'company-update'  company_id=company.id %}'"
+                                            type="button"
+                                            class="btn btn-primary">
+                                        Edit
+                                    </button>
+                                    <button onclick="location.href='{% url 'company-order'  company_id=company.id filter='all' %}'"
+                                            type="button"
+                                            class="btn btn-primary">
+                                        Company Orders
+                                    </button>
+                                    {% include 'company/company/company_delete_button.html' with company_id=company.id %}
+                                {% endif %}
+
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <div class="input-rating">
-                                <strong class="text-uppercase">Your Rating: </strong>
-                                <div class="wrapper">
-                                    <input type="radio" id="r5" name="rate" value="5"/><label for="r5">&#10038;</label>
-                                    <input type="radio" id="r4" name="rate" value="4"/><label for="r4">&#10038;</label>
-                                    <input type="radio" id="r3" name="rate" value="3"/><label for="r3">&#10038;</label>
-                                    <input type="radio" id="r2" name="rate" value="2"/><label for="r2">&#10038;</label>
-                                    <input type="radio" id="r1" name="rate" value="1"/><label for="r1">&#10038;</label>
+                        <div class="container">
+                            <div class="row justify-content-end">
+                                <div class="company-rating">
+                                    <i class="fa fa-star{% if company.average_review < 1 %}-o empty{% endif %}"></i>
+                                    <i class="fa fa-star{% if company.average_review < 2 %}-o empty{% endif %}"></i>
+                                    <i class="fa fa-star{% if company.average_review < 3 %}-o empty{% endif %}"></i>
+                                    <i class="fa fa-star{% if company.average_review < 4 %}-o empty{% endif %}"></i>
+                                    <i class="fa fa-star{% if company.average_review < 5 %}-o empty{% endif %}"></i>
+                                    {{ company.average_review |stringformat:".i" }}
                                 </div>
                             </div>
                         </div>
-                        {% if user.id is not None %}
-                        <button type="submit" class="btn btn-primary">submit</button>
-                        {% else %}
-                        You must be logged in to post a review
+
+                        {% if not show_edit_button %}
+                            <div class="container">
+                                <div class="row justify-content-end">
+                                    <h><strong>write your review</strong></h>
+                                    <form class="review-form" action="{% url 'add_comment' company_id=company.id %}"
+                                          method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input name="subject" class="input" type="text" placeholder="Your subject"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea name="comment" class="input" placeholder="Your review"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-rating">
+                                                <strong class="text-uppercase">Your Rating: </strong>
+                                                <div class="wrapper">
+                                                    <input type="radio" id="r5" name="rate" value="5"/><label for="r5">&#10038;</label>
+                                                    <input type="radio" id="r4" name="rate" value="4"/><label for="r4">&#10038;</label>
+                                                    <input type="radio" id="r3" name="rate" value="3"/><label for="r3">&#10038;</label>
+                                                    <input type="radio" id="r2" name="rate" value="2"/><label for="r2">&#10038;</label>
+                                                    <input type="radio" id="r1" name="rate" value="1"/><label for="r1">&#10038;</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if user.id is not None %}
+                                            <button type="submit" class="btn btn-primary">submit</button>
+                                        {% else %}
+                                            You must be logged in to post a review
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
                         {% endif %}
-                    </form>
-                </div>
+                    {% endif %}
+                    </div>
             </div>
-            {% endif %}
-            {% endif %}
         </div>
-    </div>
-</div>
-{% endif %}
+    {% endif %}
 {% endblock %}

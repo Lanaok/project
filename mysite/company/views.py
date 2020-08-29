@@ -2,7 +2,6 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
-from django.utils import timezone
 from django.views.generic import ListView
 
 from company.forms import CompanyForm, CommentForm
@@ -13,7 +12,6 @@ from notification.models import create_notification
 from order.models import Order
 from profile import models
 from profile.models import Manager, Profile
-from django.http import HttpResponse
 
 
 def edit_company(request, company_id=None):
@@ -26,23 +24,16 @@ def edit_company(request, company_id=None):
     company_form = CompanyForm(instance=company_instance)
 
     if request.method == 'POST':
-        company_form = CompanyForm(request.POST)
+        company_form = CompanyForm(request.POST, instance=company_instance, files=request.FILES)
         if company_form.is_valid():
-            company_instance.name = company_form.cleaned_data['name']
-            company_instance.description = company_form.cleaned_data['description']
-            company_instance.company_type = company_form.cleaned_data['company_type']
-            company_instance.image = company_form.cleaned_data['image']
-            if company_id:
-                company_instance.date_updated = timezone.now()
-            else:
+            if not company_id:
                 try:
                     manager = Manager.objects.get(profile=request.user.profile)
                 except Manager.DoesNotExist:
                     manager = Manager(profile=request.user.profile)
                     manager.save()
-
+                company_instance = company_form.save(commit=False)
                 company_instance.manager = manager
-                company_instance.date_created = timezone.now()
             company_instance.save()
             return redirect(reverse('company-detail', args=(company_instance.id,)))
 
@@ -199,7 +190,6 @@ class CompanyOrderList(ListView):
     model = Order
     template_name = "company/company/company_orders.html"
     paginate_by = 9
-
 
     def get_queryset(self):
         if self.kwargs['filter'] != 'all':

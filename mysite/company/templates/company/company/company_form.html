@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if user.is_authenticated %}
-        {% load crispy_forms_tags %}
-        {% crispy company_form %}
-    {% else %}
-        log in to edit company
-    {% endif %}
+    <div class="container mt-sm-4">
+        {% include "company/formtemplates/post_form_template.html" with form=company_form button_name="Save" %}
+    </div>
 {% endblock %}

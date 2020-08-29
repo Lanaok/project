@@ -3,7 +3,16 @@
     {% if user.is_authenticated %}
         {% if user_detail %}
             <div class="container">
-                <div class="row justify-content-center">
+                <div class="row justify-content-center mt-5">
+                    <div class="col-4">
+                        {% if user_detail.profile.image %}
+                            <img src="{{ user_detail.profile.image.url }}"
+                                 class="card-img-top" alt="...">
+                        {% else %}
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                 class="card-img-top" alt="...">
+                        {% endif %}
+                    </div>
                     <div class="col-4">
                         <p><strong>User Name: </strong>{{ user_detail.username }}</p>
                         <p><strong>First Name: </strong>{{ user_detail.first_name }}</p>
@@ -12,11 +21,13 @@
                         <p><strong>Date Of Birth: </strong>{{ user_detail.profile.date_of_birth }}</p>
                         <p><strong>Phone Number: </strong>{{ user_detail.profile.phone_number }}</p>
                         <p><strong>My Services: </strong>{{ user_detail.profile.staff_services }}</p>
-                        <button onclick="window.location.href='{% url 'profile-update' %}'" type="button"
-                                class="btn btn-primary">
-                            Edit Profile
-                        </button>
                     </div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <button onclick="window.location.href='{% url 'profile-update' %}'" type="button"
+                            class="btn btn-primary">
+                        Edit Profile
+                    </button>
                 </div>
             </div>
         {% else %}

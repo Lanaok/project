@@ -10,6 +10,7 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=20, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    image = models.ImageField(null=True, blank=True, upload_to='profile_photos/')
 
     def __str__(self):
         return self.user.username

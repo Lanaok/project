@@ -38,14 +38,16 @@ def edit_company(request, company_id=None):
             return redirect(reverse('company-detail', args=(company_instance.id,)))
 
     return render(request, 'company/company/company_form.html',
-                  {'company_form': company_form})
+                  {'company_form': company_form,
+                   'title': 'Update Company'})
 
 
 def view_company(request, company_id):
     company = Company.objects.get(pk=company_id)
     return render(request, 'company/company/company_detail.html',
                   {'company': company,
-                   'show_edit_button': request.user.is_authenticated and company.manager.profile == request.user.profile})
+                   'show_edit_button': request.user.is_authenticated and company.manager.profile == request.user.profile,
+                   'title': 'Company Details'})
 
 
 def remove_company(request, company_id):
@@ -59,7 +61,7 @@ def view_my_companies(request):
         return render(request, 'company/company/company_list.html',
                       {'company_list': Company.objects.all().filter(manager=company_manager),
                        'paginate': False, 'title': 'My Companies'})
-    return render(request, 'company/company/company_list.html')
+    return render(request, 'company/company/company_list.html', {'title': 'All Companies'})
 
 
 def staff_has_service(staff_instance, service_id):
@@ -94,7 +96,8 @@ def add_staff(request, company_id):
 
     return render(request, 'company/staff/staff_edit.html',
                   {'service_list': staff_service_list, 'entered_username': entered_username,
-                   'error_message': error_message})
+                   'error_message': error_message,
+                   'title': 'Add Staff'})
 
 
 def edit_staff(request, staff_id):
@@ -112,12 +115,12 @@ def edit_staff(request, staff_id):
         map(lambda service: {'id': service.id, 'name': service.name,
                              'is_checked': staff_has_service(staff_member, service.id)}, company.service_set.all()))
     return render(request, 'company/staff/staff_edit.html',
-                  {'staff_member': staff_member, 'service_list': staff_service_list})
+                  {'staff_member': staff_member, 'service_list': staff_service_list, 'title': 'Update Staff'})
 
 
 def view_staff(request, staff_id):
     return render(request, 'company/staff/staff_detail.html',
-                  {'staff_member': StaffMember.objects.get(pk=staff_id)})
+                  {'staff_member': StaffMember.objects.get(pk=staff_id), 'title': 'Staff Details'})
 
 
 def remove_staff(request, staff_id):
@@ -138,6 +141,7 @@ class StaffList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company'] = Company.objects.get(pk=self.kwargs['company_id'])
+        context['title'] = 'Staff List'
         return context
 
 
@@ -157,7 +161,8 @@ def edit_service(request, company_id, service_id=None):
             service_instance.save()
         return redirect(reverse('service-list', args=(company_id,)))
 
-    return render(request, 'company/services/service_form.html', {'service_form': service_form})
+    return render(request, 'company/services/service_form.html',
+                  {'service_form': service_form, 'title': 'Update Service'})
 
 
 def remove_service(request, service_id):
@@ -178,12 +183,13 @@ class ServiceList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company'] = Company.objects.get(pk=self.kwargs['company_id'])
+        context['title'] = 'Service List'
         return context
 
 
 def view_service(request, service_id):
     return render(request, 'company/services/service_detail.html',
-                  {'service': Service.objects.get(pk=service_id)})
+                  {'service': Service.objects.get(pk=service_id), 'title': 'Service Details'})
 
 
 class CompanyOrderList(ListView):
@@ -203,6 +209,7 @@ class CompanyOrderList(ListView):
         context['order_states'] = Order.OrderState
         context['company_id'] = self.kwargs['company_id']
         context['active_tab'] = self.kwargs['filter'] + "-tab"
+        context['title'] = 'Company Orders'
         return context
 
 

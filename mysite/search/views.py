@@ -38,4 +38,5 @@ class SearchResultList(ListView):
         context = super().get_context_data(**kwargs)
         context['last_search_query'] = self.request.GET['query']
         context['last_search_subject'] = self.request.GET['search_subject']
+        context['title'] = 'Search'
         return context

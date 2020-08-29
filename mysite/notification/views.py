@@ -13,6 +13,11 @@ class NotificationList(ListView):
     def get_queryset(self):
         return Notification.objects.filter(receiver=self.request.user.profile).order_by('-date_created')
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Notifications"
+        return context
+
 
 def mark_all_as_read(request):
     Notification.objects.filter(read=False).update(read=True)

@@ -9,6 +9,12 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'company-list' %}">Home <span class="sr-only">(current)</span></a>
             </li>
+            {% if title %}
+                <li class="nav-item">
+                    <div class="nav-link disabled">> &nbsp;&nbsp;{{ title }} <span class="sr-only">(current)</span>
+                    </div>
+                </li>
+            {% endif %}
         </ul>
         {% include 'search/searchbar.html' %}
         <ul class="navbar-nav ml-auto">

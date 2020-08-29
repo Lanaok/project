@@ -62,11 +62,12 @@ def makeorder(request, service_id):
             create_notification("Order requested", order_instance.get_message, request.user.profile,
                                 staff_profile.staffmember.company.manager.profile,
                                 reverse('company-order', args=(company.id, "all")))
-            return render(request, 'order/appointment.html')
+            return render(request, 'order/appointment.html', {'title': 'Appointment Requested'})
 
     return render(request, 'order/make_order.html', {'username': name, 'staff': staff_list, 'order_form': order_form,
                                                      'working_hour_from': company.working_hour_from,
-                                                     'working_hour_to': company.working_hour_to})
+                                                     'working_hour_to': company.working_hour_to,
+                                                     'title': 'Book an Appointment'})
 
 
 def order_view(request, order_id):
@@ -74,7 +75,8 @@ def order_view(request, order_id):
     service = order.service_order
     company = service.company
     return render(request, 'order/order_detail.html',
-                  {'order': order, 'userIsManager': company.manager.profile == request.user.profile})
+                  {'order': order, 'userIsManager': company.manager.profile == request.user.profile,
+                   'title': 'Order Details'})
 
 
 def order_change(request, order_id):
@@ -89,7 +91,7 @@ def order_remove(request, order_id):
     create_notification("Order removed", user_order.get_message, user_order.user_orders,
                         user_order.staff_order.company.manager.profile,
                         reverse('company-order', args=(user_order.staff_order.company.id, 'all')))
-    return render(request, 'order/order_remove.html', )
+    return render(request, 'order/order_remove.html', {'title': 'Order Removed'})
 
 
 def get_staff_schedule(request):

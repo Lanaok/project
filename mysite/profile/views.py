@@ -9,6 +9,7 @@ def view_profile(request):
     user_detail = request.user
     return render(request, 'profile/profile_detail.html', {
         'user_detail': user_detail,
+        'title': 'Profile Details'
     })
 
 
@@ -25,7 +26,8 @@ def update_profile(request):
         profile_form = ProfileForm(instance=request.user.profile)
     return render(request, 'profile/profile_form.html', {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
+        'title': 'Update Profile'
     })
 
 
@@ -45,4 +47,5 @@ class ProfileOrderList(ListView):
         context = super().get_context_data(**kwargs)
         context['order_states'] = Order.OrderState
         context['active_tab'] = self.kwargs['filter'] + "-tab"
+        context['title'] = 'Orders'
         return context

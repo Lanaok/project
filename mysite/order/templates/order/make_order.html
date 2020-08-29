@@ -181,7 +181,7 @@
         setScheduleTitle(chosenDate)
 
         $.ajax({
-            url: '{% url 'get-staff - schedule' %}',
+            url: '{% url 'get-staff-schedule' %}',
             data: {
                 'staff_id': $("#staffCombo option:selected").data('id'),
                 'date': chosenDate

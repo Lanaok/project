@@ -4,9 +4,11 @@
         <h1>{{ title }}</h1>
     {% endif %}
     <div class="container">
-        <div class="card-deck mt-5">
+        <div class="row mt-5">
             {% for company in company_list %}
-                {% include "company/card.html" with object=company %}
+                <div class="col-md-4 mb-5">
+                    {% include "company/card.html" with object=company %}
+                </div>
             {% endfor %}
         </div>
         <div class="row justify-content-center">

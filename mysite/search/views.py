@@ -8,7 +8,7 @@ from company.models import Company, Service
 
 class SearchResultList(ListView):
     template_name = "search/search_results.html"
-    paginate_by = 6
+    # paginate_by = 6
 
     def get_queryset(self):
         query = self.request.GET['query']

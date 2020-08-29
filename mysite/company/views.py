@@ -31,6 +31,7 @@ def edit_company(request, company_id=None):
             company_instance.name = company_form.cleaned_data['name']
             company_instance.description = company_form.cleaned_data['description']
             company_instance.company_type = company_form.cleaned_data['company_type']
+            company_instance.image = company_form.cleaned_data['image']
             if company_id:
                 company_instance.date_updated = timezone.now()
             else:

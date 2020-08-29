@@ -25,6 +25,7 @@ class Company(models.Model):
     working_hour_from = models.TimeField(default=datetime.time(9, 00), null=False, blank=False)
     working_hour_to = models.TimeField(default=datetime.time(21, 00), null=False, blank=False)
     company_type = models.CharField(choices=CompanyType.choices, max_length=10)
+    image = models.ImageField(null=True, blank=True, upload_to='company_photos/')
 
     class Meta:
         permissions = (("can_edit_company", "Edit company info"),)

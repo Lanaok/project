@@ -14,6 +14,16 @@
                         <img src="https://lunawood.com/wp-content/uploads/2018/02/placeholder-image.png"
                              class="card-img-top" alt="...">
                     {% endif %}
+                    <div class="row justify-content-end mr-auto">
+                        <div class="object-rating">
+                            <i class="fa fa-star{% if company.average_review < 1 %}-o empty{% endif %}"></i>
+                            <i class="fa fa-star{% if company.average_review < 2 %}-o empty{% endif %}"></i>
+                            <i class="fa fa-star{% if company.average_review < 3 %}-o empty{% endif %}"></i>
+                            <i class="fa fa-star{% if company.average_review < 4 %}-o empty{% endif %}"></i>
+                            <i class="fa fa-star{% if company.average_review < 5 %}-o empty{% endif %}"></i>
+                            {{ company.average_review |stringformat:".i" }}
+                        </div>
+                    </div>
                     <p><strong>Name: </strong>{{ company.name }}</p>
                     <p><strong>Description: </strong>{{ company.description }}</p>
                     <p><strong>Staff Members: </strong>

@@ -44,12 +44,33 @@ def edit_company(request, company_id=None):
                    'title': 'Update Company'})
 
 
-def view_company(request, company_id):
-    company = Company.objects.get(pk=company_id)
-    return render(request, 'company/company/company_detail.html',
-                  {'company': company,
-                   'show_edit_button': request.user.is_authenticated and company.manager.profile == request.user.profile,
-                   'title': 'Company Details'})
+class ViewCompany(ListView):
+    model = Comment
+    template_name = "company/company/company_detail.html"
+    paginate_by = 4
+
+    def get_queryset(self):
+        return Comment.objects.order_by('-update_at').filter(company=Company.objects.get(pk=self.kwargs['company_id']))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company = Company.objects.get(pk=self.kwargs['company_id'])
+        context['company'] = company
+        context['show_edit_button'] = \
+            self.request.user.is_authenticated and company.manager.profile == self.request.user.profile
+        context['title'] = 'Company Details'
+        return context
+
+
+# def view_company(request, company_id):
+#     company = Company.objects.get(pk=company_id)
+#     comments_list = Comment.objects.all().filter(company=Company.objects.get(pk=company_id))
+#
+#     return render(request, 'company/company/company_detail.html',
+#                   {'company': company,
+#                    'show_edit_button': request.user.is_authenticated and company.manager.profile == request.user.profile,
+#                    'title': 'Company Details',
+#                    'comments_list': comments_list})
 
 
 @login_required
@@ -263,6 +284,7 @@ class CompanyList(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'All Companies'
+
         return context
 
 

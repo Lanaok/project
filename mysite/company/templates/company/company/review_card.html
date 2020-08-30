@@ -1,10 +1,23 @@
-
 <a
-   class="list-group-item">
+        class="list-group-item">
     <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{ review.subject }}</h5>
-        <small>{{ review.user.username }}</small>
+        <div class="row justify-content-end">
+            <div class="company-rating">
+                <i class="fa fa-star{% if review.rate < 1 %}-o empty{% endif %}"></i>
+                <i class="fa fa-star{% if review.rate < 2 %}-o empty{% endif %}"></i>
+                <i class="fa fa-star{% if review.rate < 3 %}-o empty{% endif %}"></i>
+                <i class="fa fa-star{% if review.rate < 4 %}-o empty{% endif %}"></i>
+                <i class="fa fa-star{% if review.rate < 5 %}-o empty{% endif %}"></i>
+            </div>
+        </div>
     </div>
-    <p class="mb-1">{{ review.comment }}</p>
-{#                    <small>Donec id elit non mi porta.</small>#}
+    <p class="mb-1" style="word-break: break-word">{{ review.comment }}</p>
+    <div class="row justify-content-end">
+        <small>Review By: {{ review.user.first_name }} {{ review.user.last_name }}</small>
+    </div>
+    <div class="row justify-content-end">
+
+        <small style="text-align: end">{{ review.create_at }}</small>
+    </div>
 </a>

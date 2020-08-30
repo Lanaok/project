@@ -4,7 +4,7 @@ from order.views import makeorder
 from . import views
 
 urlpatterns = [
-    path('<int:company_id>/', views.view_company, name='company-detail'),
+    path('<int:company_id>/', views.ViewCompany.as_view(), name='company-detail'),
 
     path('<int:company_id>/orders/<str:filter>/', views.CompanyOrderList.as_view(), name='company-order'),
     path('<int:company_id>/order/update/', views.update_company_orders, name='update-order'),

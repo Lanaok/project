@@ -1,6 +1,8 @@
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.forms.utils import ErrorList
 from django.http import JsonResponse
@@ -18,6 +20,7 @@ from .forms import OrderForm
 from .models import Order
 
 
+@login_required
 def makeorder(request, service_id):
     service_requested = Service.objects.get(pk=service_id)
     company = service_requested.company
@@ -70,8 +73,10 @@ def makeorder(request, service_id):
                                                      'title': 'Book an Appointment'})
 
 
+@login_required
 def order_view(request, order_id):
     order = Order.objects.get(pk=order_id)
+    manager_or_user_matches(request.user, order)
     service = order.service_order
     company = service.company
     return render(request, 'order/order_detail.html',
@@ -79,13 +84,18 @@ def order_view(request, order_id):
                    'title': 'Order Details'})
 
 
+@login_required
 def order_change(request, order_id):
     return render(request, 'order/order_change.html',
                   {'order': Order.objects.get(pk=order_id)})
 
 
+@login_required
 def order_remove(request, order_id):
     user_order = Order.objects.get(pk=order_id)
+    if user_order.user_orders != request.user:
+        raise PermissionDenied
+
     user_order.order_state = Order.OrderState.removed
     user_order.save()
     create_notification("Order removed", user_order.get_message, user_order.user_orders,
@@ -95,7 +105,7 @@ def order_remove(request, order_id):
 
 
 def get_staff_schedule(request):
-    if request.GET:
+    if request.GET and request.GET.get('staff_id'):
         staff = StaffMember.objects.get(pk=request.GET['staff_id'])
         date = datetime.strptime(request.GET['date'], '%Y-%m-%d')
 
@@ -111,7 +121,7 @@ def get_staff_schedule(request):
                     {'from': order.order_time, 'duration': order.service_order.duration.seconds / 3600})
 
         return JsonResponse({'approved_intervals': approved_intervals, 'pending_intervals': pending_intervals})
-    return None
+    return JsonResponse({})
 
 
 def requested_hour_is_valid(orders, time):
@@ -124,3 +134,11 @@ def requested_hour_is_valid(orders, time):
         if order_time <= time < order_time_with_delta or order_time <= time_with_delta < order_time_with_delta:
             return False
     return True
+
+
+def manager_or_user_matches(user, order: Order):
+    try:
+        if order.user_orders != user and order.service_order.company.manager != user.profile.manager:
+            raise PermissionDenied
+    except Exception:
+        raise PermissionDenied("denied")

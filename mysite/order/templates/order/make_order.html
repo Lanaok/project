@@ -2,220 +2,222 @@
 
 {% block head_title %} Make An Appointment {% endblock %}
 {% block content %}
-<!-- Book An Oppointment Area Start -->
-<section class="book-an-oppointment-area section-padding-100 bg-img bg-gradient-overlay jarallax clearfix">
+    <!-- Book An Oppointment Area Start -->
+    <section class="book-an-oppointment-area section-padding-100 bg-img bg-gradient-overlay jarallax clearfix">
 
-    <div class="container">
-        <div class="row">
-            <!-- Section Heading -->
-            <div class="col-12 mt-2">
-                <div class="section-heading text-center white">
-                    <h2>Book An Appointment</h2>
-                    <div class="line"></div>
+        <div class="container">
+            <div class="row">
+                <!-- Section Heading -->
+                <div class="col-12 mt-2">
+                    <div class="section-heading text-center white">
+                        <h2>Book An Appointment</h2>
+                        <div class="line"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-1">
+            <div class="row">
+                <div class="col-1">
 
-            </div>
-            <div class="col-6 mt-5">
-                <!-- Appointment Form -->
-                <div class="appointment-form">
-                    <form action="#" method="post">
-                        {% csrf_token %}
-                        <div class="row">
+                </div>
+                <div class="col-6 mt-5">
+                    <!-- Appointment Form -->
+                    <div class="appointment-form">
+                        <form action="#" method="post">
+                            {% csrf_token %}
+                            <div class="row">
 
-                            <div class="col-md-12">
-                                <div class="form-group mb-25">
-                                    <div class="form-group">
-                                        <label for="staffCombo">Choose your staff member</label>
-                                        <select name="your-staff" class="form-control custom-select"
-                                                id="staffCombo">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-25">
+                                        <div class="form-group">
+                                            <label for="staffCombo">Choose your staff member</label>
+                                            <select name="your-staff" class="form-control custom-select"
+                                                    id="staffCombo">
 
-                                            {% for s in staff %}
-                                            <option data-id="{{ s.id }}">{{ s }}</option>
-                                            {% endfor %}
+                                                {% for s in staff %}
+                                                    <option data-id="{{ s.id }}">{{ s }}</option>
+                                                {% endfor %}
 
 
-                                        </select>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-12">
-                                {% for field in order_form %}
-                                <div class="form-group mb-25">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    {{ field }}
-                                    <div class="invalid-feedback">
-                                        {{ field.errors }}
-                                    </div>
+                                <div class="col-md-12">
+                                    {% for field in order_form %}
+                                        <div class="form-group mb-25">
+                                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            {{ field }}
+                                            <div class="invalid-feedback">
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                            </div>
 
 
-                            <div class="col-12">
-                                <div class="form-group mb-30">
+                                <div class="col-12">
+                                    <div class="form-group mb-30">
                                     <textarea name="your-message" class="form-control"
                                               placeholder="Your Message"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary">Book Now</button>
                                 </div>
                             </div>
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary">Book Now</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-auto mt-5">
-                <div class="row justify-content-center">
-                    <h3>Schedule</h3>
+                <div class="col-auto mt-5">
+                    <div class="row justify-content-center">
+                        <h3>Schedule</h3>
+                    </div>
+                    <h3 class="card-header" id="monthAndYear">Monday, Aug 17</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="calendar">
+                        </table>
+                    </div>
                 </div>
-                <h3 class="card-header" id="monthAndYear">Monday, Aug 17</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="calendar">
-                    </table>
+                <div class="col-2 mt-5 pt-5">
+                    <label>
+                        <svg width="20" height="20">
+                            <rect width="20" height="20" style="fill:#999;stroke-width:0;stroke:rgb(0,0,0)"/>
+                        </svg>
+                        Booked
+                    </label>
+                    <label>
+                        <svg width="20" height="20">
+                            <rect width="20" height="20" style="fill:#efe3af;stroke-width:0;stroke:rgb(0,0,0)"/>
+                        </svg>
+                        Pending
+                    </label>
                 </div>
-            </div>
-            <div class="col-2 mt-5 pt-5">
-                <label>
-                    <svg width="20" height="20">
-                        <rect width="20" height="20" style="fill:#999;stroke-width:0;stroke:rgb(0,0,0)"/>
-                    </svg>
-                    Booked
-                </label>
-                <label>
-                    <svg width="20" height="20">
-                        <rect width="20" height="20" style="fill:#efe3af;stroke-width:0;stroke:rgb(0,0,0)"/>
-                    </svg>
-                    Pending
-                </label>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-<!-- Book An Oppointment Area End -->
-{{ order_form.errors|json_script:"error_list" }}
-<script>
-    function drawTopRow(from, to) {
-        calendarTopRow = document.getElementById("calendar")
-        calendarTopRow.innerHTML = ""
-        for (let i = from; i <= to; i++) {
-            row = document.createElement("tr")
-            col = document.createElement("td")
-            colText = document.createElement("b")
-            colText.innerText = (i + ":00")
-            div = document.createElement("div")
-            div.setAttribute("style", "text-align: center; ")
-            col.id = `time_cell_${i}`
+    <!-- Book An Oppointment Area End -->
+    {{ order_form.errors|json_script:"error_list" }}
+    <script>
+        function drawTopRow(from, to) {
+            calendarTopRow = document.getElementById("calendar")
+            calendarTopRow.innerHTML = ""
+            for (let i = from; i <= to; i++) {
+                row = document.createElement("tr")
+                col = document.createElement("td")
+                colText = document.createElement("b")
+                colText.innerText = (i + ":00")
+                div = document.createElement("div")
+                div.setAttribute("style", "text-align: center; ")
+                col.id = `time_cell_${i}`
 
-            div.appendChild(colText)
-            col.appendChild(div)
-            row.appendChild(col)
-            calendarTopRow.appendChild(row)
-        }
-    }
-
-    function getApprovedGradient(percent) {
-        return `background:  linear-gradient(to bottom, #999 ${percent}%,#ffffff ${percent}%)`
-    }
-
-    function getApprovedGradientToLeft(percent) {
-        return `background:  linear-gradient(to top, #999 ${percent}%,#ffffff ${percent}%)`
-    }
-
-    function getPendingGradient(percent) {
-        return `background:  linear-gradient(to bottom, #efe3af ${percent}%,#ffffff ${percent}%)`
-    }
-
-    function getPendingGradientToLeft(percent) {
-        return `background:  linear-gradient(to top, #efe3af ${percent}%,#ffffff ${percent}%)`
-    }
-
-    // from, to is in hours double value
-    function setColorOfCell(from, to, getGradient, getGradientToLeft) {
-        from_min = from * 60
-        to_min = to * 60
-        cell_count = to - from
-        for (let i = Math.ceil(from); i < parseInt(to); i++) {
-            document.getElementById(`time_cell_${i}`).style = getGradient(100)
-            document.getElementById(`time_cell_${i}`).dataset['percentage'] = 100
-        }
-        var remainder_end = to - parseInt(to)
-        if (remainder_end !== 0 && to <= working_hour_to && to >= working_hour_from) {
-            document.getElementById(`time_cell_${parseInt(to)}`).style = getGradient(remainder_end * 100)
-            document.getElementById(`time_cell_${parseInt(to)}`).dataset['percentage'] = remainder_end * 100
-            document.getElementById(`time_cell_${parseInt(to)}`).dataset['direction'] = 'right'
-        }
-
-        var remainder_start = from - parseInt(from)
-        if (remainder_start !== 0 && from >= working_hour_from && from <= working_hour_to) {
-            document.getElementById(`time_cell_${parseInt(from)}`).style = getGradientToLeft(remainder_start * 100)
-            document.getElementById(`time_cell_${parseInt(from)}`).dataset['percentage'] = remainder_start * 100
-            document.getElementById(`time_cell_${parseInt(from)}`).dataset['direction'] = 'left'
-        }
-    }
-
-    function setScheduleTitle(title) {
-        document.getElementById("monthAndYear").innerText = title
-    }
-
-    var working_hour_from = parseInt("{{ working_hour_from }}".split()[0])
-    var working_hour_to = parseInt("{{ working_hour_to }}".split()[0])
-    if ("{{ working_hour_from }}".includes("p.m.")) {
-        working_hour_from += 12
-    }
-    if ("{{ working_hour_to }}".includes("p.m.")) {
-        working_hour_to += 12
-    }
-    drawTopRow(working_hour_from, working_hour_to)
-    var count = 0;
-
-    function onChange() {
-        console.log("on change")
-        chosenDate = document.getElementById("id_order_day").value
-        setScheduleTitle(chosenDate)
-
-        $.ajax({
-            url: '{% url 'get-staff-schedule' %}',
-            data: {
-                'staff_id': $("#staffCombo option:selected").data('id'),
-                'date': chosenDate
-            },
-            dataType: 'json',
-            success: function (data) {
-                approvedIntervals = data['approved_intervals']
-                pendingIntervals = data['pending_intervals']
-                drawTopRow(working_hour_from, working_hour_to)
-                colorRows(approvedIntervals, getApprovedGradient, getApprovedGradientToLeft)
-                colorRows(pendingIntervals, getPendingGradient, getPendingGradientToLeft)
+                div.appendChild(colText)
+                col.appendChild(div)
+                row.appendChild(col)
+                calendarTopRow.appendChild(row)
             }
-        });
-    }
-
-    function colorRows(result, gradientFun, gradientFunLeft) {
-        for (let i = 0; i < result.length; i++) {
-            splitTime = result[i]['from'].split(':')
-            from = parseInt(splitTime[0]) + parseFloat(splitTime[1] / 60)
-            to = from + parseInt(result[i]['duration'])
-            setColorOfCell(from, to, gradientFun, gradientFunLeft)
         }
-    }
+
+        function getApprovedGradient(percent) {
+            return `background:  linear-gradient(to bottom, #999 ${percent}%,#ffffff ${percent}%)`
+        }
+
+        function getApprovedGradientToLeft(percent) {
+            return `background:  linear-gradient(to top, #999 ${percent}%,#ffffff ${percent}%)`
+        }
+
+        function getPendingGradient(percent) {
+            return `background:  linear-gradient(to bottom, #efe3af ${percent}%,#ffffff ${percent}%)`
+        }
+
+        function getPendingGradientToLeft(percent) {
+            return `background:  linear-gradient(to top, #efe3af ${percent}%,#ffffff ${percent}%)`
+        }
+
+        // from, to is in hours double value
+        function setColorOfCell(from, to, getGradient, getGradientToLeft) {
+            from_min = from * 60
+            to_min = to * 60
+            cell_count = to - from
+            for (let i = Math.ceil(from); i < parseInt(to); i++) {
+                document.getElementById(`time_cell_${i}`).style = getGradient(100)
+                document.getElementById(`time_cell_${i}`).dataset['percentage'] = 100
+            }
+            var remainder_end = to - parseInt(to)
+            if (remainder_end !== 0 && to <= working_hour_to && to >= working_hour_from) {
+                document.getElementById(`time_cell_${parseInt(to)}`).style = getGradient(remainder_end * 100)
+                document.getElementById(`time_cell_${parseInt(to)}`).dataset['percentage'] = remainder_end * 100
+                document.getElementById(`time_cell_${parseInt(to)}`).dataset['direction'] = 'right'
+            }
+
+            var remainder_start = from - parseInt(from)
+            if (remainder_start !== 0 && from >= working_hour_from && from <= working_hour_to) {
+                document.getElementById(`time_cell_${parseInt(from)}`).style = getGradientToLeft(remainder_start * 100)
+                document.getElementById(`time_cell_${parseInt(from)}`).dataset['percentage'] = remainder_start * 100
+                document.getElementById(`time_cell_${parseInt(from)}`).dataset['direction'] = 'left'
+            }
+        }
+
+        function setScheduleTitle(title) {
+            document.getElementById("monthAndYear").innerText = title
+        }
+
+        var working_hour_from = parseInt("{{ working_hour_from }}".split()[0])
+        var working_hour_to = parseInt("{{ working_hour_to }}".split()[0])
+        if ("{{ working_hour_from }}".includes("p.m.")) {
+            working_hour_from += 12
+        }
+        if ("{{ working_hour_to }}".includes("p.m.")) {
+            working_hour_to += 12
+        }
+        drawTopRow(working_hour_from, working_hour_to)
+        var count = 0;
+
+        function onChange() {
+            console.log("on change")
+            chosenDate = document.getElementById("id_order_day").value
+            setScheduleTitle(chosenDate)
+            staffId = $("#staffCombo option:selected").data('id')
+            if (staffId) {
+                $.ajax({
+                    url: '{% url 'get-staff-schedule' %}',
+                    data: {
+                        'staff_id': staffId,
+                        'date': chosenDate
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        approvedIntervals = data['approved_intervals']
+                        pendingIntervals = data['pending_intervals']
+                        drawTopRow(working_hour_from, working_hour_to)
+                        colorRows(approvedIntervals, getApprovedGradient, getApprovedGradientToLeft)
+                        colorRows(pendingIntervals, getPendingGradient, getPendingGradientToLeft)
+                    }
+                });
+            }
+        }
+
+        function colorRows(result, gradientFun, gradientFunLeft) {
+            for (let i = 0; i < result.length; i++) {
+                splitTime = result[i]['from'].split(':')
+                from = parseInt(splitTime[0]) + parseFloat(splitTime[1] / 60)
+                to = from + parseInt(result[i]['duration'])
+                setColorOfCell(from, to, gradientFun, gradientFunLeft)
+            }
+        }
 
 
-    $("#id_order_day").on('change', onChange);
-    $("#staffCombo").on('change', onChange);
-    onChange()
+        $("#id_order_day").on('change', onChange);
+        $("#staffCombo").on('change', onChange);
+        onChange()
 
-    const errors = JSON.parse(document.getElementById('error_list').textContent);
-    console.log(errors)
-    for (const error in errors) {
-        document.getElementById('id_' + error).classList.add('is-invalid')
-    }
-</script>
+        const errors = JSON.parse(document.getElementById('error_list').textContent);
+        console.log(errors)
+        for (const error in errors) {
+            document.getElementById('id_' + error).classList.add('is-invalid')
+        }
+    </script>
 {% endblock %}
 

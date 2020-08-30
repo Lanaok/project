@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views.generic import ListView
 
@@ -5,6 +7,7 @@ from order.models import Order
 from .forms import UserForm, ProfileForm
 
 
+@login_required
 def view_profile(request):
     user_detail = request.user
     return render(request, 'profile/profile_detail.html', {
@@ -13,6 +16,7 @@ def view_profile(request):
     })
 
 
+@login_required
 def update_profile(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
@@ -31,7 +35,7 @@ def update_profile(request):
     })
 
 
-class ProfileOrderList(ListView):
+class ProfileOrderList(LoginRequiredMixin, ListView):
     model = Order
     template_name = "profile/profile_order.html"
     paginate_by = 9

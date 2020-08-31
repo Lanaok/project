@@ -180,7 +180,7 @@ class StaffList(ListView):
 
 @login_required
 def edit_service(request, company_id, service_id=None):
-    company = Company(pk=company_id)
+    company = Company.objects.get(pk=company_id)
     check_manager_permission(company.manager, request.user)
     if service_id:
         service_instance = Service.objects.get(pk=service_id)

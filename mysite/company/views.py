@@ -76,7 +76,7 @@ class ViewCompany(ListView):
 @login_required
 def remove_company(request, company_id):
     company_instance = Company.objects.get(pk=company_id)
-    check_manager_permission(company_instance, request.user)
+    check_manager_permission(company_instance.manager, request.user)
     Company.objects.get(pk=company_id).delete()
     return redirect('company-list')
 

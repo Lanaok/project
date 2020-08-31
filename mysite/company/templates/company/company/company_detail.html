@@ -61,7 +61,9 @@
                                 class="btn btn-primary btn-block">
                             Company Orders
                         </button>
-                        {% include 'company/company/company_delete_button.html' with company_id=company.id %}
+                        <div class="btn-block">
+                            {% include 'company/company/company_delete_button.html' with company_id=company.id %}
+                        </div>
                     {% endif %}
 
                 </div>

@@ -138,7 +138,7 @@ def requested_hour_is_valid(orders, time):
 
 def manager_or_user_matches(user, order: Order):
     try:
-        if order.user_orders != user and order.service_order.company.manager != user.profile.manager:
+        if order.user_orders != user.profile and order.service_order.company.manager != user.profile.manager:
             raise PermissionDenied
     except Exception:
-        raise PermissionDenied("denied")
+        raise PermissionDenied

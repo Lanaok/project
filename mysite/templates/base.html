@@ -1,82 +1,78 @@
 <!DOCTYPE html>
-{% if exception %}
-    hello
-{% else %}
-    <head>
-        {% if title %}
-            <title>{{ title }}</title>
-        {% else %}
-            <title>{% block head_title %}{% endblock %}</title>
-        {% endif %}
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-              integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-              crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.5.1.js"
-                integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-                crossorigin="anonymous"></script>
-        {% block extra_head %}
-        {% endblock %}
-    </head>
-    <body>
-    {% include 'navbar.html' %}
-    <div class="container-fluid">
-        {% load crispy_forms_tags %}
-
-        {% block content %}
-        {% endblock %}
-    </div>
-    <script>
-        $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            var forwardLink = button.data('forward-link')
-            $('#continue').attr("onclick", "location.href='" + forwardLink + "'")
-        })
-    </script>
-
-    <script src="https://use.fontawesome.com/97c81e047c.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+<head>
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>{% block head_title %}{% endblock %}</title>
+    {% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
             crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-            crossorigin="anonymous"></script>
-
-
-    {#<script>#}
-    {#    .wrapper#}
-    {#    {#}
-    {#        display: inline - block;#}
-    {#    }#}
-    {#    .wrapper * {#}
-    {#        float: right;#}
-    {#    }#}
-    {#    input#}
-    {#    {#}
-    {#        display: none;#}
-    {#    }#}
-    {#    label#}
-    {#    {#}
-    {#        font - size#}
-    {#    :#}
-    {#        30#}
-    {#        px;#}
-    {#    }#}
-    {##}
-    {#    input:checked#}
-    {#    ~label#}
-    {#    {#}
-    {#        color: red;#}
-    {#    }#}
-    {#    .wrapper:not(old) > input#}
-    {#    {#}
-    {#        margin - right#}
-    {#    :#}
-    {#        -100 %;#}
-    {#        opacity      : 0;#}
-    {#    }#}
-    {##}
-    {#</script>#}
-    {% block javascript %}
+    {% block extra_head %}
     {% endblock %}
-    </body>
-{% endif %}
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container-fluid">
+    {% load crispy_forms_tags %}
+
+    {% block content %}
+    {% endblock %}
+</div>
+<script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var forwardLink = button.data('forward-link')
+        $('#continue').attr("onclick", "location.href='" + forwardLink + "'")
+    })
+</script>
+
+<script src="https://use.fontawesome.com/97c81e047c.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+
+{#<script>#}
+{#    .wrapper#}
+{#    {#}
+{#        display: inline - block;#}
+{#    }#}
+{#    .wrapper * {#}
+{#        float: right;#}
+{#    }#}
+{#    input#}
+{#    {#}
+{#        display: none;#}
+{#    }#}
+{#    label#}
+{#    {#}
+{#        font - size#}
+{#    :#}
+{#        30#}
+{#        px;#}
+{#    }#}
+{##}
+{#    input:checked#}
+{#    ~label#}
+{#    {#}
+{#        color: red;#}
+{#    }#}
+{#    .wrapper:not(old) > input#}
+{#    {#}
+{#        margin - right#}
+{#    :#}
+{#        -100 %;#}
+{#        opacity      : 0;#}
+{#    }#}
+{##}
+{#</script>#}
+{% block javascript %}
+{% endblock %}
+</body>

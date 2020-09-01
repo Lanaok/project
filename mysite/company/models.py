@@ -16,6 +16,7 @@ class Company(models.Model):
         HOSPITAL = 'HO', 'Hospital'
         DENTISTRY = 'DE', 'Dentistry'
         BEAUTY_SALOON = 'BE', 'Beauty Salon'
+        AUTO_SERVICE = 'AU', 'Auto Service'
 
     name = models.CharField(max_length=50)
     manager = models.ForeignKey(Manager, null=True, on_delete=models.SET_NULL)

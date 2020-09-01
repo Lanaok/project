@@ -80,7 +80,7 @@ def order_view(request, order_id):
     service = order.service_order
     company = service.company
     return render(request, 'order/order_detail.html',
-                  {'order': order, 'userIsManager': company.manager.profile == request.user.profile,
+                  {'order': order, 'showRemoveButton': order.user_orders == request.user.profile and order.order_state != Order.OrderState.removed,
                    'title': 'Order Details'})
 
 
@@ -93,7 +93,7 @@ def order_change(request, order_id):
 @login_required
 def order_remove(request, order_id):
     user_order = Order.objects.get(pk=order_id)
-    if user_order.user_orders != request.user:
+    if user_order.user_orders != request.user.profile:
         raise PermissionDenied
 
     user_order.order_state = Order.OrderState.removed

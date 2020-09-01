@@ -18,7 +18,7 @@
     </br>
 </div>
 
-{% if not userIsManager %}
+{% if showRemoveButton %}
 <div class="col">
     <button type="button" class="btn btn-danger"
             onclick="location.href='{% url 'order_remove' order_id=order.id %}'"

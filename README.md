@@ -1,3 +1,12 @@
+# Web-site to book an appointment in any kind of company
+The flexible online appointment scheduling system that allows you to make orders or add your company, services and company staff. It has following functionality:
+### Company registration
+### users registration
+### ability to add staff and services
+### notifications system
+### review system (users can add their reviews for any company or service)
+### ability to make orders (cancel/delete any time)
+### ability to send message for company managers
 # მომსახურეობის დაჯავშნის სისტემა
 ვებსაიტი, სადაც გაერთიანებული იქნება სხვადასხვა ტიპის კომპანია და მომხმარებელს შეეძლება მარტივად დაჯავშნოს ნებისმიერ მათგანში ნებისმიერი ტიპის მომსახურეობა.
 სისტემაში კომპანიის წარმომადგენელს თავად შეეძლება დარეგისტრირება და კონფიგურაციის შექმნა.

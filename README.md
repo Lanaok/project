@@ -2,7 +2,7 @@
 The flexible online appointment scheduling system that allows you to make orders or add your company, services and company staff. It has following functionality:
 ### Company registration
 ### users registration (allows users to add some private information, like phone number or photo, etc.)
-### ability to add staff and services (company manager can match each service with several staff member and then customer will have ability to a choose staff member when bookin an appoinment)
+### ability to add staff and services (company manager can match each service with several staff member and then customer will have ability to choose a staff member when bookin an appoinment)
 ### notifications system
 ### review system (users can add their reviews for any company or service)
 ### ability to make orders (cancel/delete any time)
